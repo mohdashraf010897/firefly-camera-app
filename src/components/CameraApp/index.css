@@ -1,0 +1,12 @@
+/* App.css */
+.App {
+  text-align: center;
+  font-family: 'Arial, sans-serif';
+  color: var(--text-color);
+}
+
+body {
+  margin: 0;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}

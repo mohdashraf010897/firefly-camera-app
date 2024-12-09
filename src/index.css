@@ -1,0 +1,44 @@
+/* index.css */
+:root {
+  --primary-color: #01050f; /* Deep dark tone */
+  --secondary-color: #000612; /* Slightly brighter dark */
+  --accent-color: #ff4081; /* Vibrant accent color */
+  --highlight-color: #ff80ab; /* Highlight color */
+  --background-color: #020814; /* Dark background */
+  --text-color: #ffffff; /* White text for contrast */
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: 'Arial, sans-serif';
+  margin: 0;
+}
+
+button {
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+  background-color: var(--accent-color);
+  transform: translateY(-2px);
+}
+
+header {
+  background-color: var(--secondary-color);
+  padding: 20px;
+  text-align: center;
+  color: var(--text-color);
+}
+
+footer {
+  background-color: var(--highlight-color);
+  padding: 10px;
+  text-align: center;
+}
