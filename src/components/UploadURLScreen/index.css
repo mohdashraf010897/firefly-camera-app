@@ -26,7 +26,7 @@
 }
 
 .upload-url-screen button {
-  background-color: var(--primary-color);
+  background-color: var(--button-background); /* Blue button background */
   color: var(--text-color);
   border: none;
   padding: 10px 20px;
@@ -37,12 +37,6 @@
 }
 
 .upload-url-screen button:hover {
-  background-color: var(--accent-color);
+  background-color: var(--button-hover-background); /* Red button hover background */
   transform: translateY(-2px);
-}
-
-.upload-url-screen img {
-  margin-top: 20px;
-  max-width: 100%;
-  height: auto;
 }

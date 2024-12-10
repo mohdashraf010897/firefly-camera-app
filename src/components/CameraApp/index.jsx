@@ -6,6 +6,8 @@ import UploadImageScreen from "../UploadImageScreen";
 import UploadURLScreen from "../UploadURLScreen";
 import PreviewScreen from "../PreviewScreen";
 import { ImageProvider, ImageContext } from "../../context/ImageContext";
+import { ThemeProvider } from "../../context/ThemeContext";
+import Wrapper from "./Wrapper";
 import "./index.css";
 
 const CameraApp = () => {
@@ -37,18 +39,22 @@ const CameraApp = () => {
   };
 
   return (
-    <ImageProvider>
-      <AppContent
-        screen={screen}
-        setScreen={setScreen}
-        handleTakePicture={handleTakePicture}
-        handleUploadImage={handleUploadImage}
-        handleUploadURL={handleUploadURL}
-        handlePhotoTaken={handlePhotoTaken}
-        handleBack={handleBack}
-        handleRegenerate={handleRegenerate}
-      />
-    </ImageProvider>
+    <ThemeProvider>
+      <ImageProvider>
+        <Wrapper>
+          <AppContent
+            screen={screen}
+            setScreen={setScreen}
+            handleTakePicture={handleTakePicture}
+            handleUploadImage={handleUploadImage}
+            handleUploadURL={handleUploadURL}
+            handlePhotoTaken={handlePhotoTaken}
+            handleBack={handleBack}
+            handleRegenerate={handleRegenerate}
+          />
+        </Wrapper>
+      </ImageProvider>
+    </ThemeProvider>
   );
 };
 

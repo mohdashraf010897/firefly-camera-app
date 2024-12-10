@@ -1,43 +1,43 @@
 /* UploadImageScreen/index.css */
 .upload-image-screen {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    text-align: center;
-    background-color: var(--background-color);
-    color: var(--text-color);
-    padding: 20px;
-  }
-  
-  .upload-image-screen h1 {
-    font-size: 2rem;
-    margin-bottom: 20px;
-  }
-  
-  .upload-image-screen input {
-    margin-bottom: 20px;
-  }
-  
-  .upload-image-screen img {
-    margin-top: 20px;
-    max-width: 100%;
-    height: auto;
-  }
-  
-  .back-button {
-    background-color: var(--primary-color);
-    color: var(--text-color);
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .back-button:hover {
-    background-color: var(--accent-color);
-    transform: translateY(-2px);
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  padding: 20px;
+}
+
+.upload-image-screen h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.upload-image-screen input {
+  margin-bottom: 20px;
+}
+
+.upload-image-screen img {
+  margin-top: 20px;
+  max-width: 100%;
+  height: auto;
+}
+
+.back-button {
+  background-color: var(--button-background); /* Blue button background */
+  color: var(--text-color);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.back-button:hover {
+  background-color: var(--button-hover-background); /* Red button hover background */
+  transform: translateY(-2px);
+}

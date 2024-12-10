@@ -16,10 +16,66 @@
   margin-bottom: 20px;
 }
 
-.preview-screen img {
-  margin-top: 20px;
+.image-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.enhanced-image {
   max-width: 100%;
-  height: auto;
+  max-height: 100%;
+  object-fit: cover;
+}
+
+.overlay-buttons {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.icon-button {
+  background-color: rgba(15, 52, 96, 0.8); /* Semi-transparent blue background */
+  color: var(--text-color);
+  border: none;
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.icon-button:hover {
+  background-color: rgba(233, 69, 96, 0.8); /* Semi-transparent red background on hover */
+  transform: translateY(-2px);
+}
+
+.edit-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.slider-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.slider-container label {
+  font-size: 1rem;
+}
+
+.slider-container input[type="range"] {
+  width: 200px;
 }
 
 .button-container {
@@ -30,7 +86,7 @@
 }
 
 button {
-  background-color: var(--primary-color);
+  background-color: var(--button-background); /* Blue button background */
   color: var(--text-color);
   border: none;
   padding: 10px 20px;
@@ -41,7 +97,7 @@ button {
 }
 
 button:hover {
-  background-color: var(--accent-color);
+  background-color: var(--button-hover-background); /* Red button hover background */
   transform: translateY(-2px);
 }
 
