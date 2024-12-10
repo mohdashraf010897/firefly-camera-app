@@ -52,18 +52,18 @@ const PreviewScreen = ({ onBack, onRegenerate }) => {
         <div className="edit-container">
           <img src={image} alt="Original" />
           <div className="slider-container">
-            <label htmlFor="proximity-slider">Proximity</label>
+            <label htmlFor="proximity">Proximity</label>
             <input
-              id="proximity-slider"
+              id="proximity"
               type="range"
               min="0"
               max="100"
               value={proximity}
               onChange={(e) => setProximity(e.target.value)}
             />
-            <label htmlFor="strength-slider">Strength</label>
+            <label htmlFor="strength">Strength</label>
             <input
-              id="strength-slider"
+              id="strength"
               type="range"
               min="0"
               max="100"
@@ -71,9 +71,14 @@ const PreviewScreen = ({ onBack, onRegenerate }) => {
               onChange={(e) => setStrength(e.target.value)}
             />
           </div>
-          <button className="save-button" onClick={handleSaveEdit}>
-            Save
-          </button>
+          <div className="preview-edit-button-container">
+            <button className="save-button" onClick={handleSaveEdit}>
+              Save
+            </button>
+            <button className="back-button" onClick={onBack}>
+              Back
+            </button>
+          </div>
         </div>
       ) : (
         <div className="image-container">
@@ -91,12 +96,8 @@ const PreviewScreen = ({ onBack, onRegenerate }) => {
           </div>
         </div>
       )}
-      <div className="button-container">
-        <button className="back-button" onClick={onBack}>
-          Back
-        </button>
-      </div>
     </div>
   );
 };
+
 export default PreviewScreen;

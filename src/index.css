@@ -9,6 +9,8 @@
   --button-background: #0f3460; /* Blue button background */
   --button-hover-background: #e94560; /* Red button hover background */
   --button-text-color: #ffffff; /* White text for buttons */
+  --header-background: #16213e; /* Darker blue for header */
+  --header-text-color: #ffffff; /* White text for header */
 }
 
 [data-theme="light"] {
@@ -21,6 +23,8 @@
   --button-background: #007bff; /* Blue button background */
   --button-hover-background: #ff4081; /* Pink button hover background */
   --button-text-color: #ffffff; /* White text for buttons */
+  --header-background: #007bff; /* Blue for header */
+  --header-text-color: #ffffff; /* White text for header */
 }
 
 body {
@@ -52,10 +56,10 @@ button:hover {
 }
 
 header {
-  background-color: var(--secondary-color);
+  background-color: var(--header-background);
   padding: 20px;
   text-align: center;
-  color: var(--text-color);
+  color: var(--header-text-color);
 }
 
 footer {

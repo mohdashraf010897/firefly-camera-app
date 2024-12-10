@@ -30,10 +30,6 @@ const CameraApp = () => {
     console.log("Photo taken:", photo);
   };
 
-  const handleBack = () => {
-    setScreen("welcome");
-  };
-
   const handleRegenerate = () => {
     setScreen("uploadImage");
   };
@@ -41,7 +37,7 @@ const CameraApp = () => {
   return (
     <ThemeProvider>
       <ImageProvider>
-        <Wrapper>
+        <Wrapper screen={screen} setScreen={setScreen}>
           <AppContent
             screen={screen}
             setScreen={setScreen}
@@ -49,7 +45,6 @@ const CameraApp = () => {
             handleUploadImage={handleUploadImage}
             handleUploadURL={handleUploadURL}
             handlePhotoTaken={handlePhotoTaken}
-            handleBack={handleBack}
             handleRegenerate={handleRegenerate}
           />
         </Wrapper>
@@ -65,16 +60,16 @@ const AppContent = ({
   handleUploadImage,
   handleUploadURL,
   handlePhotoTaken,
-  handleBack,
   handleRegenerate,
 }) => {
   const { loading, enhancedImage } = useContext(ImageContext);
 
   useEffect(() => {
-    if (enhancedImage) {
+    console.log("🚀 ~ useEffect ~ enhancedImage:", enhancedImage);
+    if (screen !== "preview" && enhancedImage) {
       setScreen("preview");
     }
-  }, [enhancedImage, setScreen]);
+  }, [enhancedImage, setScreen, screen]);
 
   return (
     <div className="App">
@@ -87,13 +82,22 @@ const AppContent = ({
       )}
       {screen === "camera" && <CameraScreen onPhotoTaken={handlePhotoTaken} />}
       {screen === "uploadImage" && (
-        <UploadImageScreen isLoading={loading} onBack={handleBack} />
+        <UploadImageScreen
+          isLoading={loading}
+          onBack={() => setScreen("welcome")}
+        />
       )}
       {screen === "uploadURL" && (
-        <UploadURLScreen isLoading={loading} onBack={handleBack} />
+        <UploadURLScreen
+          isLoading={loading}
+          onBack={() => setScreen("welcome")}
+        />
       )}
       {screen === "preview" && (
-        <PreviewScreen onBack={handleBack} onRegenerate={handleRegenerate} />
+        <PreviewScreen
+          onBack={() => setScreen("uploadImage")}
+          onRegenerate={handleRegenerate}
+        />
       )}
     </div>
   );
