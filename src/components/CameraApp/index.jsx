@@ -1,11 +1,11 @@
 // CameraApp/index.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import WelcomeScreen from "../WelcomeScreen";
 import CameraScreen from "../CameraScreen";
 import UploadImageScreen from "../UploadImageScreen";
 import UploadURLScreen from "../UploadURLScreen";
 import PreviewScreen from "../PreviewScreen";
-import { ImageContext, ImageProvider } from "../../context/ImageContext";
+import { ImageProvider, ImageContext } from "../../context/ImageContext";
 import "./index.css";
 
 const CameraApp = () => {
@@ -40,6 +40,7 @@ const CameraApp = () => {
     <ImageProvider>
       <AppContent
         screen={screen}
+        setScreen={setScreen}
         handleTakePicture={handleTakePicture}
         handleUploadImage={handleUploadImage}
         handleUploadURL={handleUploadURL}
@@ -53,6 +54,7 @@ const CameraApp = () => {
 
 const AppContent = ({
   screen,
+  setScreen,
   handleTakePicture,
   handleUploadImage,
   handleUploadURL,
@@ -60,7 +62,13 @@ const AppContent = ({
   handleBack,
   handleRegenerate,
 }) => {
-  const { loading } = React.useContext(ImageContext);
+  const { loading, enhancedImage } = useContext(ImageContext);
+
+  useEffect(() => {
+    if (enhancedImage) {
+      setScreen("preview");
+    }
+  }, [enhancedImage, setScreen]);
 
   return (
     <div className="App">
