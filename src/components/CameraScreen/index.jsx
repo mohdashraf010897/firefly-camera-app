@@ -8,6 +8,7 @@ import {
   faLightbulb,
 } from "@fortawesome/free-solid-svg-icons";
 import "./index.css";
+import withLoading from "../WithLoading";
 
 const CameraScreen = ({ onPhotoTaken }) => {
   const camera = useRef(null);
@@ -35,21 +36,23 @@ const CameraScreen = ({ onPhotoTaken }) => {
   return (
     <div className="camera-screen">
       <div className="camera-container">
-        <Camera
-          ref={camera}
-          aspectRatio="cover"
-          facingMode={facingMode}
-          numberOfCamerasCallback={setNumberOfCameras}
-        />
+        <div className="camera-viewfinder">
+          <Camera
+            ref={camera}
+            aspectRatio="cover"
+            facingMode={facingMode}
+            numberOfCamerasCallback={setNumberOfCameras}
+          />
+        </div>
         <div className="button-container">
-          <button className="capture-button" onClick={takePhoto}>
-            <FontAwesomeIcon size="2x" icon={faCamera} />
-          </button>
           {numberOfCameras > 1 && (
             <button className="switch-button" onClick={switchCamera}>
               <FontAwesomeIcon size="2x" icon={faSyncAlt} />
             </button>
-          )}
+          )}{" "}
+          <button className="capture-button" onClick={takePhoto}>
+            <FontAwesomeIcon size="3x" icon={faCamera} />
+          </button>
           {camera.current?.torchSupported && (
             <button
               className={`torch-button ${torchOn ? "torch-on" : ""}`}
@@ -65,4 +68,4 @@ const CameraScreen = ({ onPhotoTaken }) => {
   );
 };
 
-export default CameraScreen;
+export default withLoading(CameraScreen);

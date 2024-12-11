@@ -25,11 +25,6 @@ const CameraApp = () => {
     setScreen("uploadURL");
   };
 
-  const handlePhotoTaken = (photo) => {
-    // Handle the photo taken logic here
-    console.log("Photo taken:", photo);
-  };
-
   const handleRegenerate = () => {
     setScreen("uploadImage");
   };
@@ -44,7 +39,6 @@ const CameraApp = () => {
             handleTakePicture={handleTakePicture}
             handleUploadImage={handleUploadImage}
             handleUploadURL={handleUploadURL}
-            handlePhotoTaken={handlePhotoTaken}
             handleRegenerate={handleRegenerate}
           />
         </Wrapper>
@@ -59,17 +53,21 @@ const AppContent = ({
   handleTakePicture,
   handleUploadImage,
   handleUploadURL,
-  handlePhotoTaken,
   handleRegenerate,
 }) => {
-  const { loading, enhancedImage } = useContext(ImageContext);
+  const {
+    loading,
+    enhancedImage,
+    uploadImage,
+    image: uploadedImage,
+  } = useContext(ImageContext);
+  console.log("🚀 ~ uploadedImage:", uploadedImage);
 
   useEffect(() => {
-    console.log("🚀 ~ useEffect ~ enhancedImage:", enhancedImage);
-    if (screen !== "preview" && enhancedImage) {
+    if (screen !== "preview" && enhancedImage && uploadedImage) {
       setScreen("preview");
     }
-  }, [enhancedImage, setScreen, screen]);
+  }, [enhancedImage, setScreen, screen, uploadedImage]);
 
   return (
     <div className="App">
@@ -80,7 +78,14 @@ const AppContent = ({
           onUploadURL={handleUploadURL}
         />
       )}
-      {screen === "camera" && <CameraScreen onPhotoTaken={handlePhotoTaken} />}
+      {screen === "camera" && (
+        <CameraScreen
+          isLoading={loading}
+          onPhotoTaken={(photo) => {
+            uploadImage(photo);
+          }}
+        />
+      )}
       {screen === "uploadImage" && (
         <UploadImageScreen
           isLoading={loading}
@@ -95,6 +100,7 @@ const AppContent = ({
       )}
       {screen === "preview" && (
         <PreviewScreen
+          isLoading={loading}
           onBack={() => setScreen("uploadImage")}
           onRegenerate={handleRegenerate}
         />

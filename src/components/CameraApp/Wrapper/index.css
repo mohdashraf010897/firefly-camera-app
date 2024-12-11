@@ -1,9 +1,8 @@
 /* Wrapper.css */
 .wrapper {
-  position: relative;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
 }
 
 .app-header {
@@ -56,6 +55,10 @@
 
 .wrapper-content {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   margin-top: 60px; /* Adjust to the height of the header */
   overflow-y: auto;
   padding: 20px;

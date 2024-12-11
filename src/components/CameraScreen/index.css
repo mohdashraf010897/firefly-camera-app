@@ -1,68 +1,9 @@
-/* CameraScreen.css */
-.camera-screen {
-  position: relative;
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-  color: var(--text-color);
-}
-
-.camera-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-
-.camera-container > div {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-div.button-container {
+.button-container {
   position: absolute;
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 0px;    
-  height: auto;
-  justify-content: center;
-}
-
-.capture-button, .switch-button, .torch-button {
-  background-color: var(--accent-color);
-  color: var(--text-color);
-  border: none;
-  padding: 10px 20px;
-  font-size: 24px;
-  border-radius: 50px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.capture-button:hover, .switch-button:hover, .torch-button:hover {
-  background-color: var(--highlight-color);
-  transform: translateY(-2px);
-}
-
-img {
-  margin-top: 20px;
-  max-width: 100%;
-  height: auto;
-}
-
-@media (min-width: 600px) {
-  .capture-button, .switch-button, .torch-button {
-    font-size: 28px;
-  }
+  flex-direction: row;
+  gap: 10px;
 }

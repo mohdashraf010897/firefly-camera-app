@@ -7,10 +7,12 @@ import {
   faShareAlt,
   faEdit,
 } from "@fortawesome/free-solid-svg-icons";
+import InputSlider from "../InputSlider";
 import "./index.css";
+import withLoading from "../WithLoading";
 
 const PreviewScreen = ({ onBack, onRegenerate }) => {
-  const { image, enhancedImage } = useContext(ImageContext);
+  const { image, enhancedImage, adjustImage } = useContext(ImageContext);
   const [isEditing, setIsEditing] = useState(false);
   const [proximity, setProximity] = useState(50);
   const [strength, setStrength] = useState(50);
@@ -40,7 +42,8 @@ const PreviewScreen = ({ onBack, onRegenerate }) => {
   };
 
   const handleSaveEdit = () => {
-    // Implement the logic to save the edited parameters and regenerate the image
+    // Call the adjustImage function to regenerate the image with new settings
+    adjustImage({ proximity, strength });
     setIsEditing(false);
     onRegenerate();
   };
@@ -51,24 +54,22 @@ const PreviewScreen = ({ onBack, onRegenerate }) => {
       {isEditing ? (
         <div className="edit-container">
           <img src={image} alt="Original" />
-          <div className="slider-container">
-            <label htmlFor="proximity">Proximity</label>
-            <input
+          <div className="slider-group">
+            <InputSlider
               id="proximity"
-              type="range"
-              min="0"
-              max="100"
+              label="Proximity"
+              min={0}
+              max={100}
               value={proximity}
-              onChange={(e) => setProximity(e.target.value)}
+              onChange={(e) => setProximity(Number(e.target.value))}
             />
-            <label htmlFor="strength">Strength</label>
-            <input
+            <InputSlider
               id="strength"
-              type="range"
-              min="0"
-              max="100"
+              label="Strength"
+              min={0}
+              max={100}
               value={strength}
-              onChange={(e) => setStrength(e.target.value)}
+              onChange={(e) => setStrength(Number(e.target.value))}
             />
           </div>
           <div className="preview-edit-button-container">
@@ -85,13 +86,13 @@ const PreviewScreen = ({ onBack, onRegenerate }) => {
           <img src={enhancedImage} alt="Enhanced" className="enhanced-image" />
           <div className="overlay-buttons">
             <button className="icon-button" onClick={handleDownload}>
-              <FontAwesomeIcon icon={faDownload} />
+              <FontAwesomeIcon size="2x" icon={faDownload} />
             </button>
             <button className="icon-button" onClick={handleShare}>
-              <FontAwesomeIcon icon={faShareAlt} />
+              <FontAwesomeIcon size="2x" icon={faShareAlt} />
             </button>
             <button className="icon-button" onClick={handleEdit}>
-              <FontAwesomeIcon icon={faEdit} />
+              <FontAwesomeIcon size="2x" icon={faEdit} />
             </button>
           </div>
         </div>
@@ -100,4 +101,4 @@ const PreviewScreen = ({ onBack, onRegenerate }) => {
   );
 };
 
-export default PreviewScreen;
+export default withLoading(PreviewScreen);

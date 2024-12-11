@@ -1,31 +1,79 @@
 // context/ImageContext.js
 import React, { createContext, useState } from "react";
-import { enhanceImage } from "../api";
+import useUUID from "../hooks/useUUID";
+import useAPI from "../hooks/useAPI";
+import { resizeAndCompressImage } from "../utils/imageUtils";
 
 export const ImageContext = createContext();
 
 export const ImageProvider = ({ children }) => {
   const [image, setImage] = useState(null);
   const [enhancedImage, setEnhancedImage] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [jobId, setJobId] = useState(null);
+  const uuid = useUUID();
+  const { loading, error, callReception, callDelivery, callAdjust } = useAPI();
 
-  const uploadImage = async (imageData) => {
-    setLoading(true);
+  const uploadImage = async (base64Image, settings = {}) => {
     try {
-      const { enhancedImage = undefined } = await enhanceImage(imageData);
-      console.log("🚀 ~ uploadImage ~ enhanced:", enhancedImage);
-      console.log("🚀 ~ uploadImage ~ imageData:", imageData);
-      setEnhancedImage(enhancedImage);
-    } catch (error) {
-      console.error("Error enhancing image:", error);
-    } finally {
-      setLoading(false);
+      const resizedImage = await resizeAndCompressImage(base64Image, 800, 600);
+      const payload = {
+        client_uuid: uuid,
+        settings,
+        refference_image: resizedImage,
+      };
+      const { job_id } = await callReception(payload);
+      setJobId(job_id);
+      checkDeliveryStatus(job_id);
+    } catch (err) {
+      console.error("Error uploading image:", err);
+    }
+  };
+
+  const checkDeliveryStatus = async (job_id) => {
+    try {
+      const payload = {
+        client_uuid: uuid,
+        job_id,
+      };
+      const response = await callDelivery(payload);
+      if (response.download_url) {
+        setEnhancedImage(response.download_url);
+      } else if (response.error) {
+        console.error("Error:", response.error_message);
+      } else {
+        setTimeout(() => checkDeliveryStatus(job_id), 1000);
+      }
+    } catch (err) {
+      console.error("Error checking delivery status:", err);
+    }
+  };
+
+  const adjustImage = async (settings) => {
+    try {
+      const payload = {
+        client_uuid: uuid,
+        job_id: jobId,
+        settings,
+      };
+      const { job_id } = await callAdjust(payload);
+      setJobId(job_id);
+      checkDeliveryStatus(job_id);
+    } catch (err) {
+      console.error("Error adjusting image:", err);
     }
   };
 
   return (
     <ImageContext.Provider
-      value={{ image, setImage, enhancedImage, loading, uploadImage }}
+      value={{
+        image,
+        setImage,
+        enhancedImage,
+        loading,
+        error,
+        uploadImage,
+        adjustImage,
+      }}
     >
       {children}
     </ImageContext.Provider>

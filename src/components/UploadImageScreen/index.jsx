@@ -12,8 +12,9 @@ const UploadImageScreen = ({ onBack }) => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImage(reader.result);
-        uploadImage(reader.result);
+        const base64Image = reader.result;
+        setImage(base64Image);
+        uploadImage(base64Image);
       };
       reader.readAsDataURL(file);
     }
