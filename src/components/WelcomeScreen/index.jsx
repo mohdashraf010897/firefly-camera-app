@@ -1,8 +1,11 @@
 // WelcomeScreen.jsx
 import React from "react";
 import "./index.css";
-
+import ImageShare from "../Share";
 const WelcomeScreen = ({ onTakePicture, onUploadImage, onUploadURL }) => {
+  const imageUrl =
+    "https://via.placeholder.com/400"; // Replace with your image URL
+
   return (
     <div className="welcome-screen">
       <h1>Adobe FireflyCam</h1>
@@ -18,6 +21,11 @@ const WelcomeScreen = ({ onTakePicture, onUploadImage, onUploadURL }) => {
           Upload via URL
         </button>
       </div>
+      <div>
+      <h1 style={{ textAlign: "center" }}>React Image Share</h1>
+      <ImageShare imageUrl={imageUrl} />
+    </div>
+
     </div>
   );
 };
