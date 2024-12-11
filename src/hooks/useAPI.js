@@ -1,18 +1,17 @@
 // src/hooks/useAPI.js
-import { useState } from "react";
+import { useState, useContext } from "react";
 import axiosInstance from "../api/axiosConfig";
+import { ErrorContext } from "../context/ErrorContext";
 
 const useAPI = () => {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const { setError } = useContext(ErrorContext);
 
   const callReception = async (payload) => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axiosInstance.post("/reception", payload, {
-        method: "POST",
-      });
+      const response = await axiosInstance.post("/reception", payload);
       return response.data;
     } catch (err) {
       setError(err.response ? err.response.data : "Unexpected error");
@@ -50,7 +49,7 @@ const useAPI = () => {
     }
   };
 
-  return { loading, error, callReception, callDelivery, callAdjust };
+  return { loading, callReception, callDelivery, callAdjust };
 };
 
 export default useAPI;

@@ -4,9 +4,17 @@ import "./index.css";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
 import CameraApp from "./components/CameraApp";
+import { ErrorProvider } from "./context/ErrorContext";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<CameraApp />);
+root.render(
+  <ErrorProvider>
+    <ErrorBoundary>
+      <CameraApp />
+    </ErrorBoundary>
+  </ErrorProvider>
+);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
