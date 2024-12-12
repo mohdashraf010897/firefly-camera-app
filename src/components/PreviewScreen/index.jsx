@@ -10,12 +10,14 @@ import {
 import InputSlider from "../InputSlider";
 import "./index.css";
 import withLoading from "../WithLoading";
+import useShare from "../../hooks/useShare";
 
 const PreviewScreen = ({ onBack, onRegenerate }) => {
   const { image, enhancedImage, adjustImage } = useContext(ImageContext);
   const [isEditing, setIsEditing] = useState(false);
   const [proximity, setProximity] = useState(50);
   const [strength, setStrength] = useState(50);
+  const share = useShare();
 
   const handleDownload = () => {
     const link = document.createElement("a");
@@ -27,14 +29,11 @@ const PreviewScreen = ({ onBack, onRegenerate }) => {
   };
 
   const handleShare = () => {
-    if (navigator.share) {
-      navigator.share({
-        title: "Enhanced Image",
-        url: enhancedImage,
-      });
-    } else {
-      alert("Share not supported on this browser");
-    }
+    share({
+      title: "Enhanced Image",
+      text: "Check out this enhanced image!",
+      url: enhancedImage,
+    });
   };
 
   const handleEdit = () => {
@@ -86,13 +85,13 @@ const PreviewScreen = ({ onBack, onRegenerate }) => {
           <img src={enhancedImage} alt="Enhanced" className="enhanced-image" />
           <div className="overlay-buttons">
             <button className="icon-button" onClick={handleDownload}>
-              <FontAwesomeIcon size="2x" icon={faDownload} />
+              <FontAwesomeIcon icon={faDownload} />
             </button>
             <button className="icon-button" onClick={handleShare}>
-              <FontAwesomeIcon size="2x" icon={faShareAlt} />
+              <FontAwesomeIcon icon={faShareAlt} />
             </button>
             <button className="icon-button" onClick={handleEdit}>
-              <FontAwesomeIcon size="2x" icon={faEdit} />
+              <FontAwesomeIcon icon={faEdit} />
             </button>
           </div>
         </div>
