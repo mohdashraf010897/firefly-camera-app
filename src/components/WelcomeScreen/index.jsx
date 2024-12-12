@@ -1,7 +1,7 @@
 // WelcomeScreen.jsx
 import React from "react";
 import "./index.css";
-
+import GeolocationComponent from "../GeoLocation";
 const WelcomeScreen = ({ onTakePicture, onUploadImage, onUploadURL }) => {
   return (
     <div className="welcome-screen">
@@ -18,6 +18,7 @@ const WelcomeScreen = ({ onTakePicture, onUploadImage, onUploadURL }) => {
           Upload via URL
         </button>
       </div>
+      <GeolocationComponent/>
     </div>
   );
 };
