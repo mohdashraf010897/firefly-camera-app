@@ -11,7 +11,7 @@ const useAPI = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axiosInstance.post("/reception", payload);
+      const response = await axiosInstance.post("/reception2", payload);
       return response.data;
     } catch (err) {
       setError(err.response ? err.response.data : "Unexpected error");
@@ -26,8 +26,10 @@ const useAPI = () => {
     setError(null);
     try {
       const response = await axiosInstance.post("/delivery", payload);
+      console.log("🚀 ~ callDelivery ~ response:", response);
       return response.data;
     } catch (err) {
+      console.log("🚀 ~ callDelivery ~ err:", err);
       setError(err.response ? err.response.data : "Unexpected error");
       throw err;
     } finally {

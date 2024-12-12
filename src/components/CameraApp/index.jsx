@@ -67,7 +67,7 @@ const AppContent = ({
   console.log("🚀 ~ uploadedImage:", uploadedImage);
 
   useEffect(() => {
-    if (screen !== "preview" && enhancedImage && uploadedImage) {
+    if (screen !== "preview" && enhancedImage) {
       setScreen("preview");
     }
   }, [enhancedImage, setScreen, screen, uploadedImage]);

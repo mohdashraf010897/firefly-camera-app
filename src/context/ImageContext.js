@@ -25,7 +25,7 @@ export const ImageProvider = ({ children }) => {
           ...settings,
           coordinates: coords,
         },
-        refference_image: resizedImage,
+        reference_image: resizedImage,
       };
       const { job_id } = await callReception(payload);
       setJobId(job_id);
@@ -42,6 +42,7 @@ export const ImageProvider = ({ children }) => {
         job_id,
       };
       const response = await callDelivery(payload);
+      console.log("🚀 ~ checkDeliveryStatus ~ response:", response);
       if (response.download_url) {
         setEnhancedImage(response.download_url);
       } else if (response.error) {

@@ -15,8 +15,8 @@ import useShare from "../../hooks/useShare";
 const PreviewScreen = ({ onBack, onRegenerate }) => {
   const { image, enhancedImage, adjustImage } = useContext(ImageContext);
   const [isEditing, setIsEditing] = useState(false);
-  const [proximity, setProximity] = useState(50);
-  const [strength, setStrength] = useState(50);
+  const [proximity, setProximity] = useState(100);
+  const [strength, setStrength] = useState(100);
   const share = useShare();
 
   const handleDownload = () => {
@@ -57,7 +57,7 @@ const PreviewScreen = ({ onBack, onRegenerate }) => {
             <InputSlider
               id="proximity"
               label="Proximity"
-              min={0}
+              min={1}
               max={100}
               value={proximity}
               onChange={(e) => setProximity(Number(e.target.value))}
@@ -65,7 +65,7 @@ const PreviewScreen = ({ onBack, onRegenerate }) => {
             <InputSlider
               id="strength"
               label="Strength"
-              min={0}
+              min={1}
               max={100}
               value={strength}
               onChange={(e) => setStrength(Number(e.target.value))}
