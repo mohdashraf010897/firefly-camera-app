@@ -8,10 +8,13 @@ import PreviewScreen from "../PreviewScreen";
 import { ImageProvider, ImageContext } from "../../context/ImageContext";
 import { ThemeProvider } from "../../context/ThemeContext";
 import Wrapper from "./Wrapper";
+import { USE_DIRECT_CAMERA } from "../../config";
 import "./index.css";
 
 const CameraApp = () => {
-  const [screen, setScreen] = useState("welcome");
+  const [screen, setScreen] = useState(
+    USE_DIRECT_CAMERA ? "camera" : "welcome"
+  );
 
   const handleTakePicture = () => {
     setScreen("camera");
@@ -71,7 +74,7 @@ const AppContent = ({
 
   return (
     <div className="App">
-      {screen === "welcome" && (
+      {screen === "welcome" && !USE_DIRECT_CAMERA && (
         <WelcomeScreen
           onTakePicture={handleTakePicture}
           onUploadImage={handleUploadImage}
@@ -86,13 +89,13 @@ const AppContent = ({
           }}
         />
       )}
-      {screen === "uploadImage" && (
+      {screen === "uploadImage" && !USE_DIRECT_CAMERA && (
         <UploadImageScreen
           isLoading={loading}
           onBack={() => setScreen("welcome")}
         />
       )}
-      {screen === "uploadURL" && (
+      {screen === "uploadURL" && !USE_DIRECT_CAMERA && (
         <UploadURLScreen
           isLoading={loading}
           onBack={() => setScreen("welcome")}
@@ -101,7 +104,7 @@ const AppContent = ({
       {screen === "preview" && (
         <PreviewScreen
           isLoading={loading}
-          onBack={() => setScreen("uploadImage")}
+          onBack={() => setScreen(USE_DIRECT_CAMERA ? "camera" : "uploadImage")}
           onRegenerate={handleRegenerate}
         />
       )}
