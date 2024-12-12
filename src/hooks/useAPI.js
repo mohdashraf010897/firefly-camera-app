@@ -11,7 +11,7 @@ const useAPI = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axiosInstance.post("/reception", payload);
+      const response = await axiosInstance.post("/reception2", payload);
       if (response.status === 200) {
         return response.data;
       } else {
@@ -48,14 +48,41 @@ const useAPI = () => {
     setError(null);
     try {
       const response = await axiosInstance.post("/delivery", payload);
-      console.log("🚀 ~ callDelivery ~ response:", response);
-      return response.data;
+      if (response.status === 200) {
+        setLoading(false);
+        return response.data;
+      } else if (response.status === 202) {
+        setLoading(false);
+        return { jobNotFinished: true };
+      } else {
+        throw new Error(`Unexpected response code: ${response.status}`);
+      }
     } catch (err) {
-      console.log("🚀 ~ callDelivery ~ err:", err);
-      setError(err.response ? err.response.data : "Unexpected error");
-      throw err;
-    } finally {
+      if (err.response) {
+        switch (err.response.status) {
+          case 405:
+            setError("Wrong method, use POST");
+            break;
+          case 400:
+            setError("Bad request, no client_uuid or job_id set");
+            break;
+          case 404:
+            setError("Job not found");
+            break;
+          case 403:
+            setError("Job found but client_uuid mismatch");
+            break;
+          case 500:
+            setError("Unexpected error");
+            break;
+          default:
+            setError(`Unexpected response code: ${err.response.status}`);
+        }
+      } else {
+        setError("Network error");
+      }
       setLoading(false);
+      throw err;
     }
   };
 

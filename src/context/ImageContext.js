@@ -54,8 +54,10 @@ export const ImageProvider = ({ children }) => {
         setEnhancedImage(response.download_url);
       } else if (response.error) {
         console.error("Error:", response.error_message);
-      } else {
+      } else if (response.jobNotFinished) {
         setTimeout(() => checkDeliveryStatus(job_id), 1000);
+      } else {
+        console.error("Unexpected response");
       }
     } catch (err) {
       console.error("Error checking delivery status:", err);
