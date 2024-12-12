@@ -11,6 +11,8 @@
   --button-text-color: #ffffff; /* White text for buttons */
   --header-background: #16213e; /* Darker blue for header */
   --header-text-color: #ffffff; /* White text for header */
+  --location-granted-color: #00ff00; /* Green for granted location */
+  --location-denied-color: #ff0000; /* Red for denied location */
 }
 
 [data-theme="light"] {
@@ -25,12 +27,14 @@
   --button-text-color: #ffffff; /* White text for buttons */
   --header-background: #007bff; /* Blue for header */
   --header-text-color: #ffffff; /* White text for header */
+  --location-granted-color: #2cff2c; /* Bright green for granted location */
+  --location-denied-color: #ff0000; /* Red for denied location */
 }
 
 body {
   background-color: var(--background-color);
   color: var(--text-color);
-  font-family: 'Arial, sans-serif';
+  font-family: "Arial, sans-serif";
   margin: 0;
   height: 100vh;
   overflow: hidden;
@@ -43,7 +47,6 @@ button {
   padding: 10px 20px;
   border-radius: 5px;
   transition: background-color 0.3s ease, transform 0.3s ease;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 button:hover {

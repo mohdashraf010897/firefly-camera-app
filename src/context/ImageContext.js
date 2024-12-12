@@ -2,6 +2,7 @@
 import React, { createContext, useState } from "react";
 import useUUID from "../hooks/useUUID";
 import useAPI from "../hooks/useAPI";
+import useDeviceLocation from "../hooks/useDeviceLocation";
 import { resizeAndCompressImage } from "../utils/imageUtils";
 
 export const ImageContext = createContext();
@@ -11,14 +12,19 @@ export const ImageProvider = ({ children }) => {
   const [enhancedImage, setEnhancedImage] = useState(null);
   const [jobId, setJobId] = useState(null);
   const uuid = useUUID();
+  const { coords, locationError, fetchLocation, permissionStatus } =
+    useDeviceLocation();
   const { loading, error, callReception, callDelivery, callAdjust } = useAPI();
 
-  const uploadImage = async (base64Image, settings = {}) => {
+  const uploadImage = async (base64Image, settings) => {
     try {
       const resizedImage = await resizeAndCompressImage(base64Image, 800, 600);
       const payload = {
         client_uuid: uuid,
-        settings,
+        settings: {
+          ...settings,
+          coordinates: coords,
+        },
         refference_image: resizedImage,
       };
       const { job_id } = await callReception(payload);
@@ -53,7 +59,10 @@ export const ImageProvider = ({ children }) => {
       const payload = {
         client_uuid: uuid,
         job_id: jobId,
-        settings,
+        settings: {
+          ...settings,
+          coordinates: coords,
+        },
       };
       const { job_id } = await callAdjust(payload);
       setJobId(job_id);
@@ -73,6 +82,9 @@ export const ImageProvider = ({ children }) => {
         error,
         uploadImage,
         adjustImage,
+        locationError,
+        fetchLocation,
+        permissionStatus,
       }}
     >
       {children}

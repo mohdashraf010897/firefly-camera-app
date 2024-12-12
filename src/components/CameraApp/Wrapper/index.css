@@ -45,12 +45,45 @@
   color: var(--highlight-color);
 }
 
-.sun-icon {
-  color: #ffdd57; /* Bright yellowish shade for sun icon */
+.location-status {
+  display: flex;
+  align-items: center;
+  position: relative;
 }
 
-.moon-icon {
-  color: #ffffff; /* White color for moon icon */
+.location-icon {
+  font-size: 1.5rem;
+}
+
+.location-icon.granted {
+  color: var(--location-granted-color);
+}
+
+.location-icon.denied {
+  color: var(--location-denied-color);
+}
+
+.location-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.location-button:hover .location-icon {
+  color: var(--highlight-color);
+}
+
+.strike-through {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--location-denied-color);
+  transform: rotate(45deg);
+  transform-origin: center;
 }
 
 .wrapper-content {

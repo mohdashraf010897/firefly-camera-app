@@ -1,14 +1,21 @@
-// Wrapper.jsx
+// Wrapper/index.jsx
 import React, { useContext } from "react";
 import { ThemeContext } from "../../../context/ThemeContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSun, faMoon, faHome } from "@fortawesome/free-solid-svg-icons";
+import {
+  faSun,
+  faMoon,
+  faHome,
+  faMapMarkerAlt,
+} from "@fortawesome/free-solid-svg-icons";
 import "./index.css";
 import { ImageContext } from "../../../context/ImageContext";
 
 const Wrapper = ({ children, setScreen }) => {
   const { theme, toggleTheme } = useContext(ThemeContext);
-  const { setImage } = useContext(ImageContext);
+  const { setImage, fetchLocation, permissionStatus } =
+    useContext(ImageContext);
+
   const handleBack = () => {
     setScreen("welcome");
     setImage(null);
@@ -24,6 +31,22 @@ const Wrapper = ({ children, setScreen }) => {
         >
           <FontAwesomeIcon icon={faHome} />
         </button>
+        <div className="location-status">
+          {permissionStatus === "granted" ? (
+            <FontAwesomeIcon
+              icon={faMapMarkerAlt}
+              className="location-icon granted"
+            />
+          ) : (
+            <button onClick={fetchLocation} className="location-button">
+              <FontAwesomeIcon
+                icon={faMapMarkerAlt}
+                className="location-icon denied"
+              />
+              <span className="strike-through"></span>
+            </button>
+          )}
+        </div>
         <button
           onClick={toggleTheme}
           aria-label="Toggle theme"
