@@ -1,5 +1,5 @@
-// CameraScreen.jsx
-import React, { useRef, useState } from "react";
+// CameraScreen/index.jsx
+import React, { useRef, useContext, useState } from "react";
 import { Camera } from "react-camera-pro";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -9,13 +9,14 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import "./index.css";
 import withLoading from "../WithLoading";
+import { ImageContext } from "../../context/ImageContext";
 
 const CameraScreen = ({ onPhotoTaken }) => {
   const camera = useRef(null);
-  const [image, setImage] = useState(null);
   const [facingMode, setFacingMode] = useState("user");
   const [numberOfCameras, setNumberOfCameras] = useState(0);
   const [torchOn, setTorchOn] = useState(false);
+  const { setImage } = useContext(ImageContext);
 
   const takePhoto = () => {
     const photo = camera.current.takePhoto();
@@ -49,7 +50,7 @@ const CameraScreen = ({ onPhotoTaken }) => {
             <button className="switch-button" onClick={switchCamera}>
               <FontAwesomeIcon size="2x" icon={faSyncAlt} />
             </button>
-          )}{" "}
+          )}
           <button className="capture-button" onClick={takePhoto}>
             <FontAwesomeIcon size="3x" icon={faCamera} />
           </button>
@@ -63,7 +64,6 @@ const CameraScreen = ({ onPhotoTaken }) => {
           )}
         </div>
       </div>
-      {image && <img src={image} alt="captured img" />}
     </div>
   );
 };

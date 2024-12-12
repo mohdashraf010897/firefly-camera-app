@@ -64,10 +64,9 @@ const AppContent = ({
     uploadImage,
     image: uploadedImage,
   } = useContext(ImageContext);
-  console.log("🚀 ~ uploadedImage:", uploadedImage);
 
   useEffect(() => {
-    if (screen !== "preview" && enhancedImage) {
+    if (screen !== "preview" && enhancedImage && uploadedImage) {
       setScreen("preview");
     }
   }, [enhancedImage, setScreen, screen, uploadedImage]);

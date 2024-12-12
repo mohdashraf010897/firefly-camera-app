@@ -1,4 +1,4 @@
-// context/ImageContext.js
+// src/context/ImageContext.js
 import React, { createContext, useState } from "react";
 import useUUID from "../hooks/useUUID";
 import useAPI from "../hooks/useAPI";
@@ -11,20 +11,28 @@ export const ImageProvider = ({ children }) => {
   const [image, setImage] = useState(null);
   const [enhancedImage, setEnhancedImage] = useState(null);
   const [jobId, setJobId] = useState(null);
+  const [proximity, setProximity] = useState(50);
+  const [strength, setStrength] = useState(50);
   const uuid = useUUID();
   const { coords, locationError, fetchLocation, permissionStatus } =
     useDeviceLocation();
   const { loading, error, callReception, callDelivery, callAdjust } = useAPI();
 
-  const uploadImage = async (base64Image, settings) => {
+  const createPayload = (settings = {}) => ({
+    client_uuid: uuid,
+    settings: {
+      proximity,
+      strength,
+      ...settings,
+      coordinates: coords,
+    },
+  });
+
+  const uploadImage = async (base64Image, settings = {}) => {
     try {
       const resizedImage = await resizeAndCompressImage(base64Image, 800, 600);
       const payload = {
-        client_uuid: uuid,
-        settings: {
-          ...settings,
-          coordinates: coords,
-        },
+        ...createPayload(settings),
         reference_image: resizedImage,
       };
       const { job_id } = await callReception(payload);
@@ -42,7 +50,6 @@ export const ImageProvider = ({ children }) => {
         job_id,
       };
       const response = await callDelivery(payload);
-      console.log("🚀 ~ checkDeliveryStatus ~ response:", response);
       if (response.download_url) {
         setEnhancedImage(response.download_url);
       } else if (response.error) {
@@ -55,15 +62,11 @@ export const ImageProvider = ({ children }) => {
     }
   };
 
-  const adjustImage = async (settings) => {
+  const adjustImage = async (settings = {}) => {
     try {
       const payload = {
-        client_uuid: uuid,
+        ...createPayload(settings),
         job_id: jobId,
-        settings: {
-          ...settings,
-          coordinates: coords,
-        },
       };
       const { job_id } = await callAdjust(payload);
       setJobId(job_id);
@@ -86,6 +89,10 @@ export const ImageProvider = ({ children }) => {
         locationError,
         fetchLocation,
         permissionStatus,
+        proximity,
+        setProximity,
+        strength,
+        setStrength,
       }}
     >
       {children}
