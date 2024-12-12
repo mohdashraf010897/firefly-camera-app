@@ -1,4 +1,4 @@
-/* PreviewScreen/index.css */
+/* src/components/PreviewScreen/index.css */
 .preview-screen {
   display: flex;
   flex-direction: column;
@@ -30,7 +30,7 @@
 
 .preview-screen .edit-container img {
   max-width: 100%;
-  max-height: 50vh; /* Limit the height of the image */
+  max-height: 43vh; /* Limit the height of the image */
   object-fit: contain; /* Ensure the image is contained within the available space */
 }
 
@@ -110,6 +110,17 @@ button:hover {
     --button-hover-background
   ); /* Red button hover background */
   transform: translateY(-2px);
+}
+
+.prompt {
+  max-width: 100%;
+  white-space: pre-wrap;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  cursor: pointer;
 }
 
 @media (min-width: 600px) {

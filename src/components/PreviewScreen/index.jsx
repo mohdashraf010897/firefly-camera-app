@@ -16,6 +16,7 @@ const PreviewScreen = ({ onBack, onRegenerate }) => {
   const {
     image,
     enhancedImage,
+    prompt,
     adjustImage,
     proximity,
     setProximity,
@@ -59,6 +60,11 @@ const PreviewScreen = ({ onBack, onRegenerate }) => {
       {isEditing ? (
         <div className="edit-container">
           <img src={image} alt="Original" />
+          {prompt && (
+            <p className="prompt" title={prompt}>
+              {prompt}
+            </p>
+          )}
           <div className="slider-group">
             <InputSlider
               id="proximity"

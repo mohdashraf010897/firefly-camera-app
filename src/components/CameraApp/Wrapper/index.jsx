@@ -20,6 +20,8 @@ const Wrapper = ({ children, setScreen }) => {
   const handleBack = () => {
     if (!USE_DIRECT_CAMERA) {
       setScreen("welcome");
+    } else {
+      setScreen("camera");
     }
     setImage(null);
   };

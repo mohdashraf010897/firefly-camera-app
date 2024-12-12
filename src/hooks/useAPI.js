@@ -140,7 +140,14 @@ const useAPI = () => {
     }
   };
 
-  return { loading, error, callReception, callDelivery, callAdjust };
+  return {
+    loading,
+    error,
+    callReception,
+    callDelivery,
+    callAdjust,
+    setLoading,
+  };
 };
 
 export default useAPI;

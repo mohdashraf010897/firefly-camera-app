@@ -11,13 +11,15 @@ export const ImageContext = createContext();
 export const ImageProvider = ({ children }) => {
   const [image, setImage] = useState(null);
   const [enhancedImage, setEnhancedImage] = useState(null);
+  const [prompt, setPrompt] = useState(null);
   const [jobId, setJobId] = useState(null);
   const [proximity, setProximity] = useState(50);
   const [strength, setStrength] = useState(50);
   const uuid = useUUID();
   const { coords, locationError, fetchLocation, permissionStatus } =
     useDeviceLocation();
-  const { loading, callReception, callDelivery, callAdjust } = useAPI();
+  const { loading, setLoading, callReception, callDelivery, callAdjust } =
+    useAPI();
   const { setError } = useContext(ErrorContext);
 
   const createPayload = (settings = {}) => ({
@@ -43,6 +45,7 @@ export const ImageProvider = ({ children }) => {
     } catch (err) {
       console.error("Error uploading image:", err);
       setError(err.message);
+      setLoading(false);
     }
   };
 
@@ -52,21 +55,26 @@ export const ImageProvider = ({ children }) => {
         client_uuid: uuid,
         job_id,
       };
-      const response = await callDelivery(payload, true);
+      const response = await callDelivery(payload);
       if (response.download_url) {
         setEnhancedImage(response.download_url);
+        setPrompt(response.prompt);
+        setLoading(false);
       } else if (response.error) {
         console.error("Error:", response.error_message);
         setError(response.error_message);
+        setLoading(false);
       } else if (response.jobNotFinished) {
         setTimeout(() => checkDeliveryStatus(job_id), 5000);
       } else {
         console.error("Unexpected response");
         setError("Unexpected response");
+        setLoading(false);
       }
     } catch (err) {
       console.error("Error checking delivery status:", err);
       setError(err.message);
+      setLoading(false);
     }
   };
 
@@ -83,13 +91,16 @@ export const ImageProvider = ({ children }) => {
       } else if (response.error) {
         console.error("Error:", response.error_message);
         setError(response.error_message);
+        setLoading(false);
       } else {
         console.error("Unexpected response");
         setError("Unexpected response");
+        setLoading(false);
       }
     } catch (err) {
       console.error("Error adjusting image:", err);
       setError(err.message);
+      setLoading(false);
     }
   };
 
@@ -99,6 +110,7 @@ export const ImageProvider = ({ children }) => {
         image,
         setImage,
         enhancedImage,
+        prompt,
         loading,
         uploadImage,
         adjustImage,
