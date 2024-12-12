@@ -1,4 +1,4 @@
-// PreviewScreen/index.jsx
+// src/components/PreviewScreen/index.jsx
 import React, { useContext, useState } from "react";
 import { ImageContext } from "../../context/ImageContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -22,7 +22,6 @@ const PreviewScreen = ({ onBack, onRegenerate }) => {
     strength,
     setStrength,
   } = useContext(ImageContext);
-  console.log("🚀 ~ PreviewScreen ~ image:", image);
   const [isEditing, setIsEditing] = useState(false);
   const share = useShare();
 

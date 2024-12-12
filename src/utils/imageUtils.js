@@ -35,7 +35,7 @@ export const resizeAndCompressImage = (base64Image, maxWidth, maxHeight) => {
           const reader = new FileReader();
           reader.readAsDataURL(blob);
           reader.onloadend = () => {
-            const optimizedImage = reader.result;
+            const optimizedImage = reader.result.split(",")[1]; // Remove the prefix
             const optimizedSize = optimizedImage.length;
             console.log(`Optimized image size: ${optimizedSize} bytes`);
             console.log(

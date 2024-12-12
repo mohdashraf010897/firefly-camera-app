@@ -1,9 +1,10 @@
 // src/context/ImageContext.js
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useContext } from "react";
 import useUUID from "../hooks/useUUID";
 import useAPI from "../hooks/useAPI";
 import useDeviceLocation from "../hooks/useDeviceLocation";
 import { resizeAndCompressImage } from "../utils/imageUtils";
+import { ErrorContext } from "./ErrorContext";
 
 export const ImageContext = createContext();
 
@@ -16,7 +17,8 @@ export const ImageProvider = ({ children }) => {
   const uuid = useUUID();
   const { coords, locationError, fetchLocation, permissionStatus } =
     useDeviceLocation();
-  const { loading, error, callReception, callDelivery, callAdjust } = useAPI();
+  const { loading, callReception, callDelivery, callAdjust } = useAPI();
+  const { setError } = useContext(ErrorContext);
 
   const createPayload = (settings = {}) => ({
     client_uuid: uuid,
@@ -40,6 +42,7 @@ export const ImageProvider = ({ children }) => {
       checkDeliveryStatus(job_id);
     } catch (err) {
       console.error("Error uploading image:", err);
+      setError(err.message);
     }
   };
 
@@ -49,18 +52,21 @@ export const ImageProvider = ({ children }) => {
         client_uuid: uuid,
         job_id,
       };
-      const response = await callDelivery(payload);
+      const response = await callDelivery(payload, true);
       if (response.download_url) {
         setEnhancedImage(response.download_url);
       } else if (response.error) {
         console.error("Error:", response.error_message);
+        setError(response.error_message);
       } else if (response.jobNotFinished) {
-        setTimeout(() => checkDeliveryStatus(job_id), 1000);
+        setTimeout(() => checkDeliveryStatus(job_id), 5000);
       } else {
         console.error("Unexpected response");
+        setError("Unexpected response");
       }
     } catch (err) {
       console.error("Error checking delivery status:", err);
+      setError(err.message);
     }
   };
 
@@ -70,11 +76,20 @@ export const ImageProvider = ({ children }) => {
         ...createPayload(settings),
         job_id: jobId,
       };
-      const { job_id } = await callAdjust(payload);
-      setJobId(job_id);
-      checkDeliveryStatus(job_id);
+      const response = await callAdjust(payload);
+      if (response.job_id) {
+        setJobId(response.job_id);
+        checkDeliveryStatus(response.job_id);
+      } else if (response.error) {
+        console.error("Error:", response.error_message);
+        setError(response.error_message);
+      } else {
+        console.error("Unexpected response");
+        setError("Unexpected response");
+      }
     } catch (err) {
       console.error("Error adjusting image:", err);
+      setError(err.message);
     }
   };
 
@@ -85,7 +100,6 @@ export const ImageProvider = ({ children }) => {
         setImage,
         enhancedImage,
         loading,
-        error,
         uploadImage,
         adjustImage,
         locationError,
