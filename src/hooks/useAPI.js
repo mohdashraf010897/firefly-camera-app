@@ -11,10 +11,32 @@ const useAPI = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axiosInstance.post("/reception2", payload);
-      return response.data;
+      const response = await axiosInstance.post("/reception", payload);
+      if (response.status === 200) {
+        return response.data;
+      } else {
+        throw new Error(`Unexpected response code: ${response.status}`);
+      }
     } catch (err) {
-      setError(err.response ? err.response.data : "Unexpected error");
+      if (err.response) {
+        switch (err.response.status) {
+          case 405:
+            setError("Wrong method, use POST");
+            break;
+          case 400:
+            setError(
+              "Bad request, no client_uuid, settings or reference_image set"
+            );
+            break;
+          case 500:
+            setError("Unexpected error");
+            break;
+          default:
+            setError(`Unexpected response code: ${err.response.status}`);
+        }
+      } else {
+        setError("Network error");
+      }
       throw err;
     } finally {
       setLoading(false);
