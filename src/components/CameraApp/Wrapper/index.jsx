@@ -10,6 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import "./index.css";
 import { ImageContext } from "../../../context/ImageContext";
+import { USE_DIRECT_CAMERA } from "../../../config";
 
 const Wrapper = ({ children, setScreen }) => {
   const { theme, toggleTheme } = useContext(ThemeContext);
@@ -17,20 +18,24 @@ const Wrapper = ({ children, setScreen }) => {
     useContext(ImageContext);
 
   const handleBack = () => {
-    setScreen("welcome");
+    if (!USE_DIRECT_CAMERA) {
+      setScreen("welcome");
+    }
     setImage(null);
   };
 
   return (
     <div className="wrapper">
       <header className="app-header">
-        <button
-          onClick={handleBack}
-          aria-label="Back/Home"
-          className="nav-button"
-        >
-          <FontAwesomeIcon icon={faHome} />
-        </button>
+        {
+          <button
+            onClick={handleBack}
+            aria-label="Back/Home"
+            className="nav-button"
+          >
+            <FontAwesomeIcon icon={faHome} />
+          </button>
+        }
         <div className="location-status">
           {permissionStatus === "granted" ? (
             <FontAwesomeIcon
