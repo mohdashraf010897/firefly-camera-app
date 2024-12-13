@@ -611,7 +611,8 @@
   .image-container {
     position: relative;
     padding: 1rem;
-    padding-top: 3.5rem; /* Make room for prompt overlay */
+    padding-top: 0rem;
+    padding-bottom: 10rem;
   }
 
   .prompt-display {
@@ -721,10 +722,7 @@
     }
 
     .prompt-display {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
+      position: relative;
       border-radius: 0;
       background: rgba(0, 0, 0, 0.8);
     }
@@ -739,7 +737,7 @@
     }
 
     .image-group {
-      margin-top: 3.5rem; /* Make space for absolute positioned prompt */
+      margin-top: 0rem; /* Make space for absolute positioned prompt */
     }
   }
 }
