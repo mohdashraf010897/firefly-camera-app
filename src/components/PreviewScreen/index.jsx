@@ -12,11 +12,13 @@ import "./index.css";
 import withLoading from "../WithLoading";
 import useShare from "../../hooks/useShare";
 
+// eslint-disable-next-line no-unused-vars
 const PreviewScreen = ({ onBack, onRegenerate }) => {
   const {
     image,
     enhancedImage,
     prompt,
+    setPrompt,
     adjustImage,
     proximity,
     setProximity,
@@ -48,47 +50,82 @@ const PreviewScreen = ({ onBack, onRegenerate }) => {
   };
 
   const handleSaveEdit = () => {
-    // Call the adjustImage function to regenerate the image with new settings
-    adjustImage({ proximity, strength });
+    adjustImage({ proximity, strength, prompt });
     setIsEditing(false);
     onRegenerate();
   };
 
+  const handlePromptChange = (e) => {
+    const value = e.target.value;
+    if (value.length <= 500) {
+      // Maximum length validation
+      setPrompt(value);
+    }
+  };
+
   return (
     <div className="preview-screen">
-      <h1>{isEditing ? "Edit Image" : "Enhanced Image"}</h1>
       {isEditing ? (
         <div className="edit-container">
-          <img src={image} alt="Original" />
-          {prompt && (
-            <p className="prompt" title={prompt}>
-              {prompt}
-            </p>
-          )}
-          <div className="slider-group">
-            <InputSlider
-              id="proximity"
-              label="Proximity"
-              min={0}
-              max={100}
-              value={proximity}
-              onChange={(e) => setProximity(Number(e.target.value))}
-            />
-            <InputSlider
-              id="strength"
-              label="Strength"
-              min={0}
-              max={100}
-              value={strength}
-              onChange={(e) => setStrength(Number(e.target.value))}
-            />
+          <div className="edit-header">
+            <h1>Edit Settings</h1>
           </div>
-          <div className="preview-edit-button-container">
+
+          <div className="edit-content">
+            <div className="controls-container">
+              <div className="prompt-container">
+                <h3>AI Prompt</h3>
+                <textarea
+                  className="prompt-input"
+                  value={prompt}
+                  onChange={handlePromptChange}
+                  placeholder="Enter AI prompt... (max 500 characters)"
+                  aria-label="AI Prompt Input"
+                />
+                {prompt.length > 0 && (
+                  <div className="prompt-counter">
+                    {prompt.length}/500 characters
+                  </div>
+                )}
+              </div>
+              <div className="slider-group">
+                <InputSlider
+                  id="proximity"
+                  label="Proximity"
+                  min={1}
+                  max={100}
+                  value={proximity}
+                  onChange={(e) => setProximity(Number(e.target.value))}
+                />
+                <InputSlider
+                  id="strength"
+                  label="Strength"
+                  min={1}
+                  max={100}
+                  value={strength}
+                  onChange={(e) => setStrength(Number(e.target.value))}
+                />
+              </div>
+            </div>
+
+            <div className="reference-image">
+              <h3>Reference Image</h3>
+              <div className="image-wrapper">
+                <img src={image} alt="Original" className="preview-image" />
+              </div>
+            </div>
+          </div>
+
+          <div className="button-group">
             <button className="save-button" onClick={handleSaveEdit}>
-              Save
+              <FontAwesomeIcon icon={faEdit} className="button-icon" />
+              Apply Changes
             </button>
-            <button className="back-button" onClick={onBack}>
-              Back
+            <button
+              className="cancel-button"
+              onClick={() => setIsEditing(false)}
+            >
+              Cancel
             </button>
           </div>
         </div>
