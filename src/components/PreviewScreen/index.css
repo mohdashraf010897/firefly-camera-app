@@ -3,7 +3,7 @@
   height: 90vh;
   background-color: var(--background-color);
   color: var(--text-color);
-  overflow: hidden; /* Prevent body scroll */
+  overflow-y: auto;
 }
 
 .edit-container {
@@ -36,41 +36,56 @@
 }
 
 .image-container {
-  position: relative;
-  width: 100%;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1rem;
+  max-width: 100%;
 }
 
 .image-group {
+  flex: 1;
+  min-width: 300px;
   position: relative;
-  display: inline-block;
 }
 
 .enhanced-image {
   max-width: 100%;
-  max-height: 79vh;
+  height: auto;
   object-fit: contain;
   width: auto;
   display: block;
 }
 
 .prompt-display {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  width: 300px;
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(8px);
   color: white;
-  padding: 0.75rem 1rem;
-  text-align: left;
+  padding: 1rem;
+  border-radius: 8px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: opacity 0.3s ease;
-  opacity: 0.8;
+  box-sizing: border-box;
+}
+
+.prompt-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.9);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
+}
+
+.prompt-text {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: white;
+  font-weight: 300;
 }
 
 .overlay-buttons {
@@ -272,19 +287,6 @@
   font-size: 1.1rem;
 }
 
-@media (max-width: 768px) {
-  .edit-container {
-    padding: 0.5rem;
-  }
-
-  .image-wrapper {
-    min-width: 250px;
-  }
-
-  .button-group button {
-    width: 100%;
-  }
-}
 .original-image-wrapper {
   width: 100%;
   max-width: 500px;
@@ -293,13 +295,6 @@
   border-radius: 12px;
   padding: 1rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.preview-image {
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
-  object-fit: contain;
 }
 
 .prompt-container {
@@ -327,12 +322,6 @@
   text-align: center;
   word-break: break-word;
   line-height: 1.4;
-}
-
-.back-button {
-  background: var(--error-color, #f44336);
-  color: white;
-  border: none;
 }
 
 .prompt-input {
@@ -415,13 +404,7 @@
   .edit-container {
     padding-bottom: 0;
     overflow: hidden;
-  }
-
-  .edit-content {
-    flex-direction: row;
-    gap: 1.5rem;
-    overflow-y: auto;
-    padding-bottom: 80px;
+    padding-top: 0;
   }
 
   .controls-container,
@@ -430,35 +413,94 @@
     min-width: 300px;
   }
 
-  .button-group {
-    position: fixed;
-    bottom: 0;
-  }
-
   .edit-header {
     display: none;
   }
 
-  .edit-container {
-    padding-top: 0;
+  .prompt-display {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin-bottom: 0;
+    border-radius: 0;
   }
-}
 
-.prompt-display {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(8px);
-  color: white;
-  padding: 0.75rem 1rem;
-  text-align: left;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: opacity 0.3s ease;
-  opacity: 0.8;
-  box-sizing: border-box;
+  .prompt-text {
+    font-size: 0.85rem;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+  }
+
+  .image-container {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+    max-width: 100%;
+  }
+
+  .image-group {
+    flex: 1;
+    position: relative;
+  }
+
+  .prompt-display {
+    position: relative;
+    width: 300px;
+    margin: 0;
+  }
+
+  /* Add media query for narrow landscape screens */
+  @media (max-width: 900px) {
+    .image-container {
+      flex-direction: column;
+    }
+
+    .prompt-display {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: auto;
+      margin: 0;
+      border-radius: 0;
+    }
+
+    .prompt-text {
+      font-size: 0.85rem;
+      -webkit-line-clamp: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+    }
+  }
+
+  .preview-screen {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .image-container {
+    min-height: 100%;
+    padding-bottom: 8rem;
+  }
+
+  .enhanced-image {
+    max-height: none;
+  }
+
+  .prompt-display {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    border-radius: 0;
+    width: 100%;
+  }
 }
 
 .prompt-display:hover {
@@ -491,6 +533,7 @@
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
+  text-align: left;
 }
 
 /* Dark theme adjustments */
@@ -522,5 +565,181 @@
 
   .prompt-text {
     -webkit-line-clamp: 1;
+  }
+}
+
+/* Adjust for smaller screens */
+@media (max-width: 768px) {
+  .image-container {
+    flex-direction: column;
+  }
+
+  .prompt-display {
+    width: 100%;
+    order: -1; /* Show prompt above image on mobile */
+  }
+}
+
+/* Landscape mode adjustments */
+@media (orientation: landscape) and (max-height: 500px) {
+  .prompt-display {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: auto;
+    border-radius: 0;
+  }
+
+  .prompt-text {
+    font-size: 0.85rem;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+  }
+}
+
+@media (orientation: landscape) {
+  .preview-screen {
+    height: 100vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .image-container {
+    position: relative;
+    padding: 1rem;
+    padding-top: 3.5rem; /* Make room for prompt overlay */
+  }
+
+  .prompt-display {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    margin: 0;
+    border-radius: 0;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
+  }
+
+  .prompt-text {
+    font-size: 0.85rem;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+  }
+
+  .image-group {
+    width: 100%;
+    max-width: none;
+  }
+
+  .enhanced-image {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+}
+
+.preview-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 1rem;
+}
+
+.prompt-display {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.prompt-text {
+  margin: 0.25rem 0 0;
+  font-size: 1rem;
+  line-height: 1.4;
+  color: white;
+  font-weight: 300;
+  text-align: left;
+}
+
+/* Portrait mode (default) */
+@media (orientation: portrait) {
+  .preview-content {
+    flex-direction: column;
+  }
+
+  .prompt-display {
+    order: -1; /* Places prompt above image */
+    margin-bottom: 1rem;
+  }
+
+  .prompt-text {
+    font-size: 1rem;
+    -webkit-line-clamp: none; /* Allow full text */
+    white-space: normal;
+    overflow: visible;
+  }
+}
+
+/* Landscape mode */
+@media (orientation: landscape) {
+  .preview-content {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+
+  /* For wider screens */
+  @media (min-width: 1024px) {
+    .prompt-display {
+      width: 300px;
+      flex-shrink: 0;
+    }
+
+    .image-group {
+      flex: 1;
+    }
+  }
+
+  /* For narrower screens */
+  @media (max-width: 1023px) {
+    .preview-content {
+      flex-direction: column;
+    }
+
+    .prompt-display {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      border-radius: 0;
+      background: rgba(0, 0, 0, 0.8);
+    }
+
+    .prompt-text {
+      font-size: 0.85rem;
+      -webkit-line-clamp: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+    }
+
+    .image-group {
+      margin-top: 3.5rem; /* Make space for absolute positioned prompt */
+    }
   }
 }

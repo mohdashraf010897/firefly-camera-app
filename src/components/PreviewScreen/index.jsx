@@ -119,12 +119,8 @@ const PreviewScreen = ({ onBack, onRegenerate }) => {
               <FontAwesomeIcon icon={faEdit} />
             </button>
           </div>
-          <div className="image-group">
-            <img
-              src={enhancedImage}
-              alt="Enhanced"
-              className="enhanced-image"
-            />
+
+          <div className="preview-content">
             {prompt && (
               <div className="prompt-display">
                 <div className="prompt-header">
@@ -137,6 +133,14 @@ const PreviewScreen = ({ onBack, onRegenerate }) => {
                 <p className="prompt-text">{prompt}</p>
               </div>
             )}
+
+            <div className="image-group">
+              <img
+                src={enhancedImage}
+                alt="Enhanced"
+                className="enhanced-image"
+              />
+            </div>
           </div>
         </div>
       )}
