@@ -14,16 +14,28 @@ export const resizeAndCompressImage = (base64Image, maxWidth, maxHeight) => {
       let width = img.width;
       let height = img.height;
 
-      if (width > height) {
-        if (width > maxWidth) {
-          height *= maxWidth / width;
-          width = maxWidth;
+      // Ensure at least one dimension is 800px while maintaining aspect ratio
+      const minDimension = 800;
+      if (width < height) {
+        if (width < minDimension) {
+          height = (height * minDimension) / width;
+          width = minDimension;
         }
       } else {
-        if (height > maxHeight) {
-          width *= maxHeight / height;
-          height = maxHeight;
+        if (height < minDimension) {
+          width = (width * minDimension) / height;
+          height = minDimension;
         }
+      }
+
+      // Apply max dimensions if needed
+      if (width > maxWidth) {
+        height *= maxWidth / width;
+        width = maxWidth;
+      }
+      if (height > maxHeight) {
+        width *= maxHeight / height;
+        height = maxHeight;
       }
 
       canvas.width = width;
@@ -35,22 +47,15 @@ export const resizeAndCompressImage = (base64Image, maxWidth, maxHeight) => {
           const reader = new FileReader();
           reader.readAsDataURL(blob);
           reader.onloadend = () => {
-            const optimizedImage = reader.result.split(",")[1]; // Remove the prefix
-            const optimizedSize = optimizedImage.length;
-            console.log(`Optimized image size: ${optimizedSize} bytes`);
-            console.log(
-              `Size reduction: ${originalSize - optimizedSize} bytes`
-            );
+            const optimizedImage = reader.result.split(",")[1];
             resolve(optimizedImage);
           };
         },
         "image/jpeg",
-        0.8 // Adjust quality setting for JPEG compression
+        0.8
       );
     };
 
-    img.onerror = (err) => {
-      reject(err);
-    };
+    img.onerror = reject;
   });
 };
