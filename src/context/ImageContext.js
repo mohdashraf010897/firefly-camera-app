@@ -19,6 +19,7 @@ export const ImageProvider = ({ children }) => {
   const uuid = useUUID();
   const { coords, locationError, fetchLocation, permissionStatus } =
     useDeviceLocation();
+  console.log("🚀 ~ ImageProvider ~ coords:", coords);
   const { loading, setLoading, callReception, callDelivery, callAdjust } =
     useAPI();
   const { setError } = useContext(ErrorContext);

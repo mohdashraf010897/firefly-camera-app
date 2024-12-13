@@ -5,8 +5,11 @@ const useDeviceLocation = () => {
   const [coords, setCoords] = useState([0, 0]);
   const [locationError, setLocationError] = useState(null);
   const [permissionStatus, setPermissionStatus] = useState("prompt");
+  const [isManuallySet, setIsManuallySet] = useState(false);
 
   const fetchLocation = useCallback(() => {
+    if (isManuallySet) return;
+
     console.log("🌍 Fetching location...");
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -19,7 +22,7 @@ const useDeviceLocation = () => {
         },
         (error) => {
           console.error("❌ Location error:", error);
-          setCoords([0, 0]);
+          if (!isManuallySet) setCoords([0, 0]);
           setPermissionStatus("denied");
           switch (error.code) {
             case error.PERMISSION_DENIED:
@@ -46,9 +49,11 @@ const useDeviceLocation = () => {
       setPermissionStatus("denied");
       setLocationError("Geolocation not supported by this browser.");
     }
-  }, []);
+  }, [isManuallySet]);
 
   const checkPermission = useCallback(async () => {
+    if (isManuallySet) return;
+
     console.log("🔍 Checking geolocation permission...");
     if (navigator.permissions) {
       try {
@@ -77,14 +82,36 @@ const useDeviceLocation = () => {
       );
       fetchLocation();
     }
-  }, [fetchLocation]);
+  }, [fetchLocation, isManuallySet]);
+
+  const setManualCoords = useCallback((coordString) => {
+    console.log("🚀 ~ setManualCoords ~ coordString:", coordString);
+    const [longitude, latitude] = coordString
+      .split(",")
+      .map((c) => parseFloat(c.trim()));
+    setCoords([latitude, longitude]);
+    setIsManuallySet(true);
+    setLocationError(null);
+    setPermissionStatus("manual");
+  }, []);
 
   useEffect(() => {
-    console.log("🔄 useDeviceLocation hook mounted");
-    checkPermission();
-  }, [checkPermission]);
+    console.log("🚀 ~ useEffect ~ !isManuallySet:", !isManuallySet);
+    if (!isManuallySet) {
+      checkPermission();
+    }
+  }, [checkPermission, isManuallySet]);
 
-  return { coords, locationError, fetchLocation, permissionStatus };
+  console.log("🚀 ~ useDeviceLocation ~ coords:", coords);
+  console.log("🚀 ~ useDeviceLocation ~ isManuallySet:", isManuallySet);
+  return {
+    coords,
+    locationError,
+    fetchLocation,
+    permissionStatus,
+    setManualCoords,
+    isManuallySet,
+  };
 };
 
 export default useDeviceLocation;

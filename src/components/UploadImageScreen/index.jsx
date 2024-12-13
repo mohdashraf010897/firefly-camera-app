@@ -8,8 +8,8 @@ import "./index.css";
 const UploadImageScreen = ({ onBack }) => {
   const { setImage, uploadImage } = useContext(ImageContext);
   const [selectedFile, setSelectedFile] = useState(null);
-  const { coords } = useDeviceLocation();
-  const [manualCoords, setManualCoords] = useState(
+  const { coords, setManualCoords } = useDeviceLocation();
+  const [manualCoordsInput, setManualCoordsInput] = useState(
     coords ? `${coords[1]}, ${coords[0]}` : ""
   );
 
@@ -36,27 +36,39 @@ const UploadImageScreen = ({ onBack }) => {
       return;
     }
 
-    if (!isValidCoords(manualCoords)) {
+    if (!isValidCoords(manualCoordsInput)) {
       alert("Please enter coordinates in the format 'longitude, latitude'");
       return;
     }
-    console.log("🚀 ~ handleSubmit ~ manualCoords:", manualCoords);
+    console.log("🚀 ~ handleSubmit ~ manualCoords:", manualCoordsInput);
 
-    uploadImage(selectedFile, { coordinates: manualCoords });
+    uploadImage(selectedFile, { coordinates: manualCoordsInput });
+  };
+
+  const handleCoordsChange = (e) => {
+    const value = e.target.value;
+    setManualCoordsInput(value);
+    console.log("🚀 ~ handleCoordsChange ~ value:", value);
+    console.log(
+      "🚀 ~ handleCoordsChange ~ isValidCoords(value):",
+      isValidCoords(value)
+    );
+    if (isValidCoords(value)) {
+      setManualCoords(value);
+    }
   };
 
   // Update coords when device location changes
   useEffect(() => {
-    console.log("🚀 ~ useEffect ~ coords:", coords);
-    if (coords) {
-      setManualCoords(`${coords[1]}, ${coords[0]}`);
+    if (coords && coords[0] !== 0 && coords[1] !== 0) {
+      setManualCoordsInput(`${coords[1]}, ${coords[0]}`);
     }
   }, [coords]);
 
   const getInputClassName = () => {
-    if (!manualCoords) return "coordinates-input";
+    if (!manualCoordsInput) return "coordinates-input";
     return `coordinates-input ${
-      isValidCoords(manualCoords) ? "valid" : "invalid"
+      isValidCoords(manualCoordsInput) ? "valid" : "invalid"
     }`;
   };
 
@@ -86,11 +98,11 @@ const UploadImageScreen = ({ onBack }) => {
           <input
             type="text"
             placeholder="Enter coordinates (format: longitude, latitude)"
-            value={manualCoords}
-            onChange={(e) => setManualCoords(e.target.value)}
+            value={manualCoordsInput}
+            onChange={handleCoordsChange}
             className={getInputClassName()}
           />
-          {manualCoords && !isValidCoords(manualCoords) && (
+          {manualCoordsInput && !isValidCoords(manualCoordsInput) && (
             <div className="coordinates-error">
               Please enter coordinates in the format &quot;longitude,
               latitude&quot;
@@ -102,7 +114,7 @@ const UploadImageScreen = ({ onBack }) => {
           <button
             className="submit-button"
             onClick={handleSubmit}
-            disabled={!selectedFile || !isValidCoords(manualCoords)}
+            disabled={!selectedFile || !isValidCoords(manualCoordsInput)}
           >
             Upload Image
           </button>
