@@ -16,7 +16,7 @@ const useDeviceLocation = () => {
         (position) => {
           const { latitude, longitude } = position.coords;
           console.log("✅ Location fetched:", { latitude, longitude });
-          setCoords([latitude, longitude]);
+          setCoords([longitude, latitude]);
           setLocationError(null);
           setPermissionStatus("granted");
         },
@@ -75,7 +75,7 @@ const useDeviceLocation = () => {
     const [longitude, latitude] = coordString
       .split(",")
       .map((c) => parseFloat(c.trim()));
-    setCoords([latitude, longitude]);
+    setCoords([longitude, latitude]);
     setIsManuallySet(true);
     setLocationError(null);
     setPermissionStatus("manual");

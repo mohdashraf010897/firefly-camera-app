@@ -37,7 +37,7 @@ export const ImageProvider = ({ children }) => {
     const [longitude, latitude] = coordString
       .split(",")
       .map((c) => parseFloat(c.trim()));
-    setManualCoords([latitude, longitude]);
+    setManualCoords([longitude, latitude]);
   };
 
   const { loading, setLoading, callReception, callDelivery, callAdjust } =
