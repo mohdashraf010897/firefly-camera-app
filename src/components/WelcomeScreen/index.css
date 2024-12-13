@@ -5,21 +5,38 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  background: var(--background-color);
   color: var(--text-color);
   padding: 20px;
   box-sizing: border-box;
-  flex: 1; /* Allow the welcome screen to take available space */
+  flex: 1;
 }
 
 .welcome-screen h1 {
   font-size: 3rem;
   margin-bottom: 10px;
+  color: var(--text-color);
 }
 
 .welcome-screen h2 {
   font-size: 1.5rem;
   margin-bottom: 40px;
+  color: var(--text-color);
+  opacity: 0.8;
+}
+
+/* Dark theme specific styles */
+[data-theme="dark"] .welcome-screen {
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--secondary-color)
+  );
+}
+
+[data-theme="dark"] .welcome-screen h1,
+[data-theme="dark"] .welcome-screen h2 {
+  color: white;
 }
 
 .cta-container {
@@ -29,20 +46,25 @@
 }
 
 .cta-button {
-  background-color: var(--button-background); /* Blue button background */
-  color: var(--text-color);
+  background-color: var(--button-background);
+  color: white; /* Force white text for better contrast */
   border: none;
   padding: 15px 30px;
   font-size: 1.2rem;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  transition: all 0.3s ease;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .cta-button:hover {
-  background-color: var(--button-hover-background); /* Red button hover background */
+  background-color: var(--button-hover-background);
   transform: translateY(-2px);
+}
+
+.cta-button:active {
+  transform: translateY(0);
+  opacity: 0.9;
 }
 
 @media (min-width: 600px) {

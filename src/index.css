@@ -16,17 +16,17 @@
 }
 
 [data-theme="light"] {
-  --primary-color: #ffffff; /* White */
-  --secondary-color: #f0f0f0; /* Light grey */
-  --accent-color: #007bff; /* Blue */
-  --highlight-color: #ff4081; /* Vibrant pink */
-  --background-color: #ffffff; /* White background */
-  --text-color: #000000; /* Black text for contrast */
-  --button-background: #007bff; /* Blue button background */
-  --button-hover-background: #ff4081; /* Pink button hover background */
-  --button-text-color: #ffffff; /* White text for buttons */
-  --header-background: #007bff; /* Blue for header */
-  --header-text-color: #ffffff; /* White text for header */
+  --primary-color: #007bff;
+  --secondary-color: #f0f0f0;
+  --accent-color: #0056b3;
+  --highlight-color: #ff4081;
+  --background-color: #ffffff;
+  --text-color: #000000;
+  --button-background: #007bff;
+  --button-hover-background: #0056b3;
+  --button-text-color: #ffffff;
+  --header-background: #007bff;
+  --header-text-color: #ffffff;
   --location-granted-color: #2cff2c; /* Bright green for granted location */
   --location-denied-color: #ff0000; /* Red for denied location */
 }
