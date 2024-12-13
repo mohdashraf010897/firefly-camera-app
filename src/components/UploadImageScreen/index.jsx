@@ -1,14 +1,13 @@
 // UploadImageScreen/index.jsx
 import React, { useContext, useState, useEffect } from "react";
 import { ImageContext } from "../../context/ImageContext";
-import useDeviceLocation from "../../hooks/useDeviceLocation";
 import withLoading from "../WithLoading";
 import "./index.css";
 
 const UploadImageScreen = ({ onBack }) => {
-  const { setImage, uploadImage } = useContext(ImageContext);
+  const { setImage, uploadImage, coords, setManualCoords } =
+    useContext(ImageContext);
   const [selectedFile, setSelectedFile] = useState(null);
-  const { coords, setManualCoords } = useDeviceLocation();
   const [manualCoordsInput, setManualCoordsInput] = useState(
     coords ? `${coords[1]}, ${coords[0]}` : ""
   );
@@ -30,25 +29,9 @@ const UploadImageScreen = ({ onBack }) => {
     }
   };
 
-  const handleSubmit = () => {
-    if (!selectedFile) {
-      alert("Please select an image first");
-      return;
-    }
-
-    if (!isValidCoords(manualCoordsInput)) {
-      alert("Please enter coordinates in the format 'longitude, latitude'");
-      return;
-    }
-    console.log("🚀 ~ handleSubmit ~ manualCoords:", manualCoordsInput);
-
-    uploadImage(selectedFile, { coordinates: manualCoordsInput });
-  };
-
   const handleCoordsChange = (e) => {
     const value = e.target.value;
     setManualCoordsInput(value);
-    console.log("🚀 ~ handleCoordsChange ~ value:", value);
     console.log(
       "🚀 ~ handleCoordsChange ~ isValidCoords(value):",
       isValidCoords(value)
@@ -56,6 +39,18 @@ const UploadImageScreen = ({ onBack }) => {
     if (isValidCoords(value)) {
       setManualCoords(value);
     }
+  };
+
+  const handleSubmit = () => {
+    console.log("🔘 Submit clicked with:", {
+      manualCoordsInput,
+      isValid: isValidCoords(manualCoordsInput),
+    });
+
+    if (!selectedFile || !isValidCoords(manualCoordsInput)) return;
+
+    console.log("✅ Uploading with coordinates:", manualCoordsInput);
+    uploadImage(selectedFile, { coordinates: manualCoordsInput });
   };
 
   // Update coords when device location changes

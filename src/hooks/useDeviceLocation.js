@@ -8,7 +8,7 @@ const useDeviceLocation = () => {
   const [isManuallySet, setIsManuallySet] = useState(false);
 
   const fetchLocation = useCallback(() => {
-    if (isManuallySet) return;
+    if (isManuallySet || permissionStatus === "denied") return;
 
     console.log("🌍 Fetching location...");
     if (navigator.geolocation) {
@@ -22,34 +22,20 @@ const useDeviceLocation = () => {
         },
         (error) => {
           console.error("❌ Location error:", error);
-          if (!isManuallySet) setCoords([0, 0]);
+          setCoords([0, 0]);
           setPermissionStatus("denied");
-          switch (error.code) {
-            case error.PERMISSION_DENIED:
-              setLocationError("Location access denied. Please enable GPS.");
-              break;
-            case error.POSITION_UNAVAILABLE:
-              setLocationError("Location information unavailable.");
-              break;
-            case error.TIMEOUT:
-              setLocationError("Location request timed out.");
-              break;
-            default:
-              setLocationError("Unable to retrieve location.");
-          }
+          setLocationError(
+            "Location access denied. Please enter coordinates manually."
+          );
         },
         {
           enableHighAccuracy: true,
-          timeout: 10000,
+          timeout: 5000,
           maximumAge: 0,
         }
       );
-    } else {
-      console.error("❌ Geolocation not supported");
-      setPermissionStatus("denied");
-      setLocationError("Geolocation not supported by this browser.");
     }
-  }, [isManuallySet]);
+  }, [isManuallySet, permissionStatus]);
 
   const checkPermission = useCallback(async () => {
     if (isManuallySet) return;

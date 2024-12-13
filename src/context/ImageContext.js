@@ -16,19 +16,38 @@ export const ImageProvider = ({ children }) => {
   const [proximity, setProximity] = useState(100);
   const [strength, setStrength] = useState(100);
   const [orientation, setOrientation] = useState("portrait");
+  const [manualCoords, setManualCoords] = useState(null);
+  console.log("🚀 ~ ImageProvider ~ manualCoords:", manualCoords);
   const uuid = useUUID();
-  const { coords, locationError, fetchLocation, permissionStatus } =
-    useDeviceLocation();
-  console.log("🚀 ~ ImageProvider ~ coords:", coords);
+  const {
+    coords: deviceCoords,
+    locationError,
+    fetchLocation,
+    permissionStatus,
+  } = useDeviceLocation();
+
+  const coords = manualCoords || deviceCoords;
+
+  const handleSetManualCoords = (coordString) => {
+    if (!coordString) {
+      setManualCoords(null);
+      return;
+    }
+    const [longitude, latitude] = coordString
+      .split(",")
+      .map((c) => parseFloat(c.trim()));
+    setManualCoords([latitude, longitude]);
+  };
+
   const { loading, setLoading, callReception, callDelivery, callAdjust } =
     useAPI();
   const { setError } = useContext(ErrorContext);
 
   useEffect(() => {
-    if (coords[0] === 0 && coords[1] === 0) {
+    if (coords[0] === 0 && coords[1] === 0 && permissionStatus !== "denied") {
       fetchLocation();
     }
-  }, [fetchLocation, coords]);
+  }, [fetchLocation, coords, permissionStatus]);
 
   const createPayload = (settings = {}) => ({
     client_uuid: uuid,
@@ -36,10 +55,14 @@ export const ImageProvider = ({ children }) => {
       proximity,
       strength,
       orientation,
-      coordinates: Array.isArray(coords)
-        ? `${coords[1]}, ${coords[0]}`
-        : coords,
       ...settings,
+      coordinates:
+        settings.coordinates ||
+        (manualCoords
+          ? `${manualCoords[1]}, ${manualCoords[0]}`
+          : Array.isArray(deviceCoords)
+          ? `${deviceCoords[1]}, ${deviceCoords[0]}`
+          : "0, 0"),
     },
   });
 
@@ -57,6 +80,14 @@ export const ImageProvider = ({ children }) => {
 
   const uploadImage = async (imageData, settings = {}) => {
     try {
+      console.log("📸 Starting upload with settings:", settings);
+      console.log("🌍 Current coords state:", {
+        manualCoords,
+        deviceCoords,
+        coords,
+        isManuallySet: !!manualCoords,
+      });
+
       await detectOrientation(imageData);
       setLoading(true);
 
@@ -72,17 +103,21 @@ export const ImageProvider = ({ children }) => {
       // Resize the image
       const resizedImage = await resizeAndCompressImage(processedImage);
 
-      // Create payload
+      // Create payload with detailed logging
       const payload = {
         ...createPayload(settings),
         reference_image: resizedImage,
       };
+      console.log(
+        "📦 Final payload coordinates:",
+        payload.settings.coordinates
+      );
 
       const { job_id } = await callReception(payload);
       setJobId(job_id);
       checkDeliveryStatus(job_id);
     } catch (err) {
-      console.error("Error uploading image:", err);
+      console.error("❌ Upload error:", err);
       setError(err.message);
       setLoading(false);
     }
@@ -157,6 +192,7 @@ export const ImageProvider = ({ children }) => {
     setPrompt("");
     setProximity(100);
     setStrength(100);
+    setManualCoords(null);
   };
 
   return (
@@ -178,6 +214,9 @@ export const ImageProvider = ({ children }) => {
         setStrength: setValidStrength,
         setPrompt,
         resetState,
+        coords,
+        setManualCoords: handleSetManualCoords,
+        isManualCoords: !!manualCoords,
       }}
     >
       {children}
