@@ -50,7 +50,7 @@ const PreviewScreen = ({ onBack, onRegenerate }) => {
   };
 
   const handleSaveEdit = () => {
-    adjustImage({ proximity, strength, prompt });
+    adjustImage({ proximity, strength });
     setIsEditing(false);
     onRegenerate();
   };

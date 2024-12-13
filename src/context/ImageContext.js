@@ -1,5 +1,5 @@
 // src/context/ImageContext.js
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
 import useUUID from "../hooks/useUUID";
 import useAPI from "../hooks/useAPI";
 import useDeviceLocation from "../hooks/useDeviceLocation";
@@ -23,16 +23,22 @@ export const ImageProvider = ({ children }) => {
     useAPI();
   const { setError } = useContext(ErrorContext);
 
+  useEffect(() => {
+    if (coords[0] === 0 && coords[1] === 0) {
+      fetchLocation();
+    }
+  }, [fetchLocation, coords]);
+
   const createPayload = (settings = {}) => ({
     client_uuid: uuid,
     settings: {
       proximity,
       strength,
       orientation,
-      ...settings,
       coordinates: Array.isArray(coords)
         ? `${coords[1]}, ${coords[0]}`
         : coords,
+      ...settings,
     },
   });
 

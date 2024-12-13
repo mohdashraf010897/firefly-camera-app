@@ -40,6 +40,7 @@ const UploadImageScreen = ({ onBack }) => {
       alert("Please enter coordinates in the format 'longitude, latitude'");
       return;
     }
+    console.log("🚀 ~ handleSubmit ~ manualCoords:", manualCoords);
 
     uploadImage(selectedFile, { coordinates: manualCoords });
   };
