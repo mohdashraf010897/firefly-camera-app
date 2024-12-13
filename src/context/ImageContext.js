@@ -13,8 +13,8 @@ export const ImageProvider = ({ children }) => {
   const [enhancedImage, setEnhancedImage] = useState(null);
   const [prompt, setPrompt] = useState(null);
   const [jobId, setJobId] = useState(null);
-  const [proximity, setProximity] = useState(50);
-  const [strength, setStrength] = useState(50);
+  const [proximity, setProximity] = useState(100);
+  const [strength, setStrength] = useState(100);
   const uuid = useUUID();
   const { coords, locationError, fetchLocation, permissionStatus } =
     useDeviceLocation();
@@ -28,7 +28,10 @@ export const ImageProvider = ({ children }) => {
       proximity,
       strength,
       ...settings,
-      coordinates: coords,
+      // Convert [lat, long] array to "long, lat" string
+      coordinates: Array.isArray(coords)
+        ? `${coords[1]}, ${coords[0]}`
+        : coords,
     },
   });
 
@@ -104,6 +107,14 @@ export const ImageProvider = ({ children }) => {
     }
   };
 
+  const setValidProximity = (value) => {
+    setProximity(Math.max(1, Math.min(100, value)));
+  };
+
+  const setValidStrength = (value) => {
+    setStrength(Math.max(1, Math.min(100, value)));
+  };
+
   return (
     <ImageContext.Provider
       value={{
@@ -118,9 +129,9 @@ export const ImageProvider = ({ children }) => {
         fetchLocation,
         permissionStatus,
         proximity,
-        setProximity,
+        setProximity: setValidProximity,
         strength,
-        setStrength,
+        setStrength: setValidStrength,
       }}
     >
       {children}
