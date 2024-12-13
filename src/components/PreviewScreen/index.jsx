@@ -6,6 +6,7 @@ import {
   faDownload,
   faShareAlt,
   faEdit,
+  faMagicWandSparkles,
 } from "@fortawesome/free-solid-svg-icons";
 import InputSlider from "../InputSlider";
 import "./index.css";
@@ -18,7 +19,6 @@ const PreviewScreen = ({ onBack, onRegenerate }) => {
     image,
     enhancedImage,
     prompt,
-    setPrompt,
     adjustImage,
     proximity,
     setProximity,
@@ -55,14 +55,6 @@ const PreviewScreen = ({ onBack, onRegenerate }) => {
     onRegenerate();
   };
 
-  const handlePromptChange = (e) => {
-    const value = e.target.value;
-    if (value.length <= 500) {
-      // Maximum length validation
-      setPrompt(value);
-    }
-  };
-
   return (
     <div className="preview-screen">
       {isEditing ? (
@@ -73,21 +65,6 @@ const PreviewScreen = ({ onBack, onRegenerate }) => {
 
           <div className="edit-content">
             <div className="controls-container">
-              <div className="prompt-container">
-                <h3>AI Prompt</h3>
-                <textarea
-                  className="prompt-input"
-                  value={prompt}
-                  onChange={handlePromptChange}
-                  placeholder="Enter AI prompt... (max 500 characters)"
-                  aria-label="AI Prompt Input"
-                />
-                {prompt.length > 0 && (
-                  <div className="prompt-counter">
-                    {prompt.length}/500 characters
-                  </div>
-                )}
-              </div>
               <div className="slider-group">
                 <InputSlider
                   id="proximity"
@@ -131,7 +108,6 @@ const PreviewScreen = ({ onBack, onRegenerate }) => {
         </div>
       ) : (
         <div className="image-container">
-          <img src={enhancedImage} alt="Enhanced" className="enhanced-image" />
           <div className="overlay-buttons">
             <button className="icon-button" onClick={handleDownload}>
               <FontAwesomeIcon icon={faDownload} />
@@ -142,6 +118,25 @@ const PreviewScreen = ({ onBack, onRegenerate }) => {
             <button className="icon-button" onClick={handleEdit}>
               <FontAwesomeIcon icon={faEdit} />
             </button>
+          </div>
+          <div className="image-group">
+            <img
+              src={enhancedImage}
+              alt="Enhanced"
+              className="enhanced-image"
+            />
+            {prompt && (
+              <div className="prompt-display">
+                <div className="prompt-header">
+                  <FontAwesomeIcon
+                    icon={faMagicWandSparkles}
+                    className="magic-icon"
+                  />
+                  <span>AI Generation Prompt</span>
+                </div>
+                <p className="prompt-text">{prompt}</p>
+              </div>
+            )}
           </div>
         </div>
       )}
