@@ -14,16 +14,16 @@ import { USE_DIRECT_CAMERA } from "../../../config";
 
 const Wrapper = ({ children, setScreen }) => {
   const { theme, toggleTheme } = useContext(ThemeContext);
-  const { setImage, fetchLocation, permissionStatus } =
+  const { fetchLocation, permissionStatus, resetState } =
     useContext(ImageContext);
 
   const handleBack = () => {
+    resetState();
     if (!USE_DIRECT_CAMERA) {
       setScreen("welcome");
     } else {
       setScreen("camera");
     }
-    setImage(null);
   };
 
   return (

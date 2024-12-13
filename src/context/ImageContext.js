@@ -144,6 +144,14 @@ export const ImageProvider = ({ children }) => {
     setStrength(Math.max(1, Math.min(100, value)));
   };
 
+  const resetState = () => {
+    setImage(null);
+    setEnhancedImage(null);
+    setPrompt("");
+    setProximity(50);
+    setStrength(50);
+  };
+
   return (
     <ImageContext.Provider
       value={{
@@ -162,6 +170,7 @@ export const ImageProvider = ({ children }) => {
         strength,
         setStrength: setValidStrength,
         setPrompt,
+        resetState,
       }}
     >
       {children}
