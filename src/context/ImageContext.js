@@ -11,10 +11,11 @@ export const ImageContext = createContext();
 export const ImageProvider = ({ children }) => {
   const [image, setImage] = useState(null);
   const [enhancedImage, setEnhancedImage] = useState(null);
-  const [prompt, setPrompt] = useState(null);
+  const [prompt, setPrompt] = useState("");
   const [jobId, setJobId] = useState(null);
   const [proximity, setProximity] = useState(100);
   const [strength, setStrength] = useState(100);
+  const [orientation, setOrientation] = useState("portrait");
   const uuid = useUUID();
   const { coords, locationError, fetchLocation, permissionStatus } =
     useDeviceLocation();
@@ -27,21 +28,49 @@ export const ImageProvider = ({ children }) => {
     settings: {
       proximity,
       strength,
+      orientation,
       ...settings,
-      // Convert [lat, long] array to "long, lat" string
       coordinates: Array.isArray(coords)
         ? `${coords[1]}, ${coords[0]}`
         : coords,
     },
   });
 
-  const uploadImage = async (base64Image, settings = {}) => {
+  const detectOrientation = (imageData) => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        const isLandscape = img.width > img.height;
+        setOrientation(isLandscape ? "landscape" : "portrait");
+        resolve(imageData);
+      };
+      img.src = imageData;
+    });
+  };
+
+  const uploadImage = async (imageData, settings = {}) => {
     try {
-      const resizedImage = await resizeAndCompressImage(base64Image, 800, 600);
+      await detectOrientation(imageData);
+      setLoading(true);
+
+      // Convert base64 to proper format if needed
+      let processedImage = imageData;
+      if (
+        typeof imageData === "string" &&
+        !imageData.startsWith("data:image")
+      ) {
+        processedImage = `data:image/jpeg;base64,${imageData}`;
+      }
+
+      // Resize the image
+      const resizedImage = await resizeAndCompressImage(processedImage);
+
+      // Create payload
       const payload = {
         ...createPayload(settings),
         reference_image: resizedImage,
       };
+
       const { job_id } = await callReception(payload);
       setJobId(job_id);
       checkDeliveryStatus(job_id);
@@ -132,6 +161,7 @@ export const ImageProvider = ({ children }) => {
         setProximity: setValidProximity,
         strength,
         setStrength: setValidStrength,
+        setPrompt,
       }}
     >
       {children}

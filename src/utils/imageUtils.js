@@ -1,5 +1,9 @@
 // src/utils/imageUtils.js
-export const resizeAndCompressImage = (base64Image, maxWidth, maxHeight) => {
+export const resizeAndCompressImage = (
+  base64Image,
+  maxWidth = 1600,
+  maxHeight = 1600
+) => {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.src = base64Image;
@@ -11,48 +15,61 @@ export const resizeAndCompressImage = (base64Image, maxWidth, maxHeight) => {
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");
 
-      let width = img.width;
-      let height = img.height;
+      let { width, height } = img;
+      const aspectRatio = width / height;
 
-      // Ensure at least one dimension is 800px while maintaining aspect ratio
-      const minDimension = 800;
-      if (width < height) {
-        if (width < minDimension) {
-          height = (height * minDimension) / width;
-          width = minDimension;
+      // Smart resize logic
+      if (width > height) {
+        if (width > maxWidth) {
+          width = maxWidth;
+          height = width / aspectRatio;
         }
       } else {
-        if (height < minDimension) {
-          width = (width * minDimension) / height;
-          height = minDimension;
+        if (height > maxHeight) {
+          height = maxHeight;
+          width = height * aspectRatio;
         }
       }
 
-      // Apply max dimensions if needed
-      if (width > maxWidth) {
-        height *= maxWidth / width;
-        width = maxWidth;
-      }
-      if (height > maxHeight) {
-        width *= maxHeight / height;
-        height = maxHeight;
+      // Ensure minimum dimension is 800px
+      const minDimension = 800;
+      if (width < minDimension && height < minDimension) {
+        if (width > height) {
+          width = minDimension;
+          height = width / aspectRatio;
+        } else {
+          height = minDimension;
+          width = height * aspectRatio;
+        }
       }
 
-      canvas.width = width;
-      canvas.height = height;
-      ctx.drawImage(img, 0, 0, width, height);
+      canvas.width = Math.round(width);
+      canvas.height = Math.round(height);
 
+      // Apply sharpening
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+      ctx.drawImage(img, 0, 0, Math.round(width), Math.round(height));
+
+      // Progressive JPEG compression
       canvas.toBlob(
         (blob) => {
           const reader = new FileReader();
           reader.readAsDataURL(blob);
           reader.onloadend = () => {
             const optimizedImage = reader.result.split(",")[1];
+            console.log(`Optimized image size: ${optimizedImage.length} bytes`);
+            console.log(
+              `Compression ratio: ${(
+                (optimizedImage.length / originalSize) *
+                100
+              ).toFixed(2)}%`
+            );
             resolve(optimizedImage);
           };
         },
         "image/jpeg",
-        0.8
+        0.92 // Higher quality but still compressed
       );
     };
 
