@@ -37,6 +37,19 @@
 }
 
 .upload-url-screen button:hover {
-  background-color: var(--button-hover-background); /* Red button hover background */
+  background-color: var(
+    --button-hover-background
+  ); /* Red button hover background */
   transform: translateY(-2px);
+}
+
+.location-error {
+  color: var(--location-denied-color);
+  font-size: 0.9rem;
+  margin-top: 5px;
+  text-align: left;
+}
+
+.coordinates-input::placeholder {
+  font-size: 0.9rem;
 }

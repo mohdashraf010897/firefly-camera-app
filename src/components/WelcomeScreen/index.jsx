@@ -2,7 +2,11 @@
 import React from "react";
 import "./index.css";
 
-const WelcomeScreen = ({ onTakePicture, onUploadImage, onUploadURL }) => {
+const WelcomeScreen = ({
+  onTakePicture,
+  onUploadImage,
+  //  onUploadURL
+}) => {
   return (
     <div className="welcome-screen">
       <h1>Adobe FireflyCam</h1>
@@ -14,9 +18,9 @@ const WelcomeScreen = ({ onTakePicture, onUploadImage, onUploadURL }) => {
         <button className="cta-button" onClick={onUploadImage}>
           Upload image
         </button>
-        <button className="cta-button" onClick={onUploadURL}>
+        {/* <button className="cta-button" onClick={onUploadURL}>
           Upload via URL
-        </button>
+        </button> */}
       </div>
     </div>
   );
