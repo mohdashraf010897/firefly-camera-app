@@ -148,8 +148,8 @@ export const ImageProvider = ({ children }) => {
     setImage(null);
     setEnhancedImage(null);
     setPrompt("");
-    setProximity(50);
-    setStrength(50);
+    setProximity(100);
+    setStrength(100);
   };
 
   return (
