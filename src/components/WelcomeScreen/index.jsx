@@ -6,7 +6,8 @@ const WelcomeScreen = ({
   onTakePicture,
   onUploadImage,
   //  onUploadURL
-}) => {
+}) => {  
+
   return (
     <div className="welcome-screen">
       <h1>Adobe FireflyCam</h1>
