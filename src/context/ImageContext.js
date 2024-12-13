@@ -3,6 +3,7 @@ import React, { createContext, useState, useContext, useEffect } from "react";
 import useUUID from "../hooks/useUUID";
 import useAPI from "../hooks/useAPI";
 import useDeviceLocation from "../hooks/useDeviceLocation";
+import useDeviceOrientation from "../hooks/useDeviceOrientation";
 import { resizeAndCompressImage } from "../utils/imageUtils";
 import { ErrorContext } from "./ErrorContext";
 
@@ -43,11 +44,17 @@ export const ImageProvider = ({ children }) => {
     useAPI();
   const { setError } = useContext(ErrorContext);
 
+  const deviceOrientation = useDeviceOrientation();
+
   useEffect(() => {
     if (coords[0] === 0 && coords[1] === 0 && permissionStatus !== "denied") {
       fetchLocation();
     }
   }, [fetchLocation, coords, permissionStatus]);
+
+  useEffect(() => {
+    setOrientation(deviceOrientation.toLowerCase());
+  }, [deviceOrientation]);
 
   const createPayload = (settings = {}) => ({
     client_uuid: uuid,
@@ -66,17 +73,17 @@ export const ImageProvider = ({ children }) => {
     },
   });
 
-  const detectOrientation = (imageData) => {
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.onload = () => {
-        const isLandscape = img.width > img.height;
-        setOrientation(isLandscape ? "landscape" : "portrait");
-        resolve(imageData);
-      };
-      img.src = imageData;
-    });
-  };
+  // const detectOrientation = (imageData) => {
+  //   return new Promise((resolve) => {
+  //     const img = new Image();
+  //     img.onload = () => {
+  //       const isLandscape = img.width > img.height;
+  //       setOrientation(isLandscape ? "landscape" : "portrait");
+  //       resolve(imageData);
+  //     };
+  //     img.src = imageData;
+  //   });
+  // };
 
   const uploadImage = async (imageData, settings = {}) => {
     try {
@@ -88,7 +95,7 @@ export const ImageProvider = ({ children }) => {
         isManuallySet: !!manualCoords,
       });
 
-      await detectOrientation(imageData);
+      // await detectOrientation(imageData);
       setLoading(true);
 
       // Convert base64 to proper format if needed
