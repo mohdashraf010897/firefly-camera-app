@@ -3,7 +3,6 @@ import React, { useState, useEffect, useContext } from "react";
 import WelcomeScreen from "../WelcomeScreen";
 import CameraScreen from "../CameraScreen";
 import UploadImageScreen from "../UploadImageScreen";
-import UploadURLScreen from "../UploadURLScreen";
 import PreviewScreen from "../PreviewScreen";
 import { ImageProvider, ImageContext } from "../../context/ImageContext";
 import { ThemeProvider } from "../../context/ThemeContext";
@@ -94,12 +93,12 @@ const AppContent = ({
           onBack={() => setScreen("welcome")}
         />
       )}
-      {screen === "uploadURL" && !USE_DIRECT_CAMERA && (
+      {/* {screen === "uploadURL" && !USE_DIRECT_CAMERA && (
         <UploadURLScreen
           isLoading={loading}
           onBack={() => setScreen("welcome")}
         />
-      )}
+      )} */}
       {screen === "preview" && (
         <PreviewScreen
           isLoading={loading}
