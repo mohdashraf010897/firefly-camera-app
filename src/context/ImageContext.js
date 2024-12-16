@@ -34,9 +34,7 @@ export const ImageProvider = ({ children }) => {
       setManualCoords(null);
       return;
     }
-    const [longitude, latitude] = coordString
-      .split(",")
-      .map((c) => parseFloat(c.trim()));
+    const [longitude, latitude] = coordString.split(",").map((c) => c.trim());
     setManualCoords([latitude, longitude]);
   };
 
@@ -68,8 +66,8 @@ export const ImageProvider = ({ children }) => {
         (manualCoords
           ? `${manualCoords[1]}, ${manualCoords[0]}`
           : Array.isArray(deviceCoords)
-            ? `${deviceCoords[1]}, ${deviceCoords[0]}`
-            : "0, 0"),
+          ? `${deviceCoords[1]}, ${deviceCoords[0]}`
+          : "0, 0"),
     },
   });
 
