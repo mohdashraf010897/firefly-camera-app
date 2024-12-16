@@ -698,7 +698,7 @@
 /* Landscape mode */
 @media (orientation: landscape) {
   .preview-content {
-    flex-direction: row;
+    flex-direction: column;
     align-items: flex-start;
     gap: 1.5rem;
   }
@@ -706,7 +706,9 @@
   /* For wider screens */
   @media (min-width: 1024px) {
     .prompt-display {
-      width: 300px;
+      position: static;
+      width: 100%;
+      margin: auto;
       flex-shrink: 0;
     }
 
